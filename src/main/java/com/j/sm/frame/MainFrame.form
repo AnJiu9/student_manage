@@ -85,7 +85,7 @@
               <card name="Card4"/>
             </constraints>
             <properties>
-              <background color="-5450093"/>
+              <background color="-3292929"/>
             </properties>
             <border type="none"/>
             <children/>

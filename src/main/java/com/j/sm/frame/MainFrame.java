@@ -55,7 +55,8 @@ public class MainFrame extends JFrame{
     public void init() {
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setSize(900, 700);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 

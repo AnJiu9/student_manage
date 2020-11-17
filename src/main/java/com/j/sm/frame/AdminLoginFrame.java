@@ -16,6 +16,14 @@ import java.awt.event.ActionListener;
 
 public class AdminLoginFrame extends JFrame {
     private JPanel mainPanel;
+    private JPanel topPanel;
+    private JPanel leftPanel;
+    private JPanel rightPanel;
+    private JPanel bottomPanel;
+    private JPanel centerPanel;
+    private JPanel titlePanel;
+    private JLabel titleLable;
+    private JPanel loginPanel;
     private JTextField accountField;
     private JPasswordField passwordField;
     private JButton loginBtn;
@@ -25,7 +33,7 @@ public class AdminLoginFrame extends JFrame {
         this.setTitle("AdminLoginFrame");
         this.setContentPane(mainPanel);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 400);
+        this.setSize(900, 750);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
