@@ -1,7 +1,9 @@
 package com.j.sm.factory;
 
 import com.j.sm.service.AdminService;
+import com.j.sm.service.DepartmentService;
 import com.j.sm.service.impl.AdminServiceImpl;
+import com.j.sm.service.impl.DepartmentServiceImpl;
 
 /**
  * @ClassName ServiceFactory
@@ -13,5 +15,9 @@ import com.j.sm.service.impl.AdminServiceImpl;
 public class ServiceFactory {
     public static AdminService getAdminServiceInstance() {
         return new AdminServiceImpl();
+    }
+
+    public static DepartmentService getDepartmentServiceInstance() {
+        return new DepartmentServiceImpl();
     }
 }
