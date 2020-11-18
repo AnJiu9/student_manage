@@ -18,24 +18,36 @@
           <component id="1357e" class="javax.swing.JButton" binding="院系管理Button" default-binding="true">
             <constraints/>
             <properties>
+              <focusPainted value="false"/>
+              <font name="Osaka" size="14"/>
+              <preferredSize width="120" height="40"/>
               <text value="院系管理"/>
             </properties>
           </component>
           <component id="eb65e" class="javax.swing.JButton" binding="班级管理Button" default-binding="true">
             <constraints/>
             <properties>
+              <focusPainted value="false"/>
+              <font name="Osaka" size="14"/>
+              <preferredSize width="120" height="40"/>
               <text value="班级管理"/>
             </properties>
           </component>
           <component id="b4f5b" class="javax.swing.JButton" binding="学生管理Button" default-binding="true">
             <constraints/>
             <properties>
+              <focusPainted value="false"/>
+              <font name="Osaka" size="14"/>
+              <preferredSize width="120" height="40"/>
               <text value="学生管理"/>
             </properties>
           </component>
           <component id="7e826" class="javax.swing.JButton" binding="奖惩管理Button" default-binding="true">
             <constraints/>
             <properties>
+              <focusPainted value="false"/>
+              <font name="Osaka" size="14"/>
+              <preferredSize width="120" height="40"/>
               <text value="奖惩管理"/>
             </properties>
           </component>
