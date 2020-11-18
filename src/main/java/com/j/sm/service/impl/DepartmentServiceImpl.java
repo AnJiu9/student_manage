@@ -29,4 +29,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return departmentList;
     }
+
+    @Override
+    public void remove(String name) {
+        try {
+            departmentDao.remove(name);
+        } catch (SQLException e) {
+            System.err.println("删除错误");
+        }
+    }
 }

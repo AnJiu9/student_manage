@@ -7,7 +7,6 @@ import com.j.sm.service.AdminService;
 import com.j.sm.utils.ResultEntity;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -40,8 +39,10 @@ public class AdminServiceImpl implements AdminService {
                 resultEntity = ResultEntity.builder().code(1).message("密码错误").build();
             }
         } else {    //账号不存在
+
             resultEntity = ResultEntity.builder().code(2).message("账号不存在").build();
         }
         return resultEntity;
     }
+
 }

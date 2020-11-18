@@ -20,4 +20,9 @@ public interface DepartmentDao {
      * @throws SQLException 异常
      */
     List<Department> getAll() throws SQLException;
+
+    /**
+     * 删除
+     */
+    void remove(String name)throws SQLException;
 }

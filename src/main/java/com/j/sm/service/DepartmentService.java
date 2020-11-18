@@ -19,4 +19,6 @@ public interface DepartmentService {
      * @return List<Department>
      */
     List<Department> selectAll();
+
+    void remove(String name);
 }

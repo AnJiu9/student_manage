@@ -1,11 +1,10 @@
 package com.j.sm.frame;
 
+import com.j.sm.entity.Admin;
 import com.j.sm.factory.ServiceFactory;
 import com.j.sm.utils.ResultEntity;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @ClassName AdminLoginFrame
@@ -45,6 +44,8 @@ public class AdminLoginFrame extends JFrame {
 
             JOptionPane.showMessageDialog(mainPanel, resultEntity.getMessage());
             if (resultEntity.getCode() == 0) {
+//                System.out.println(((Admin)resultEntity.getData()).getAdminName());
+                final String adminName = ((Admin) resultEntity.getData()).getAdminName();
                 this.dispose();
                 new MainFrame();
             } else {
@@ -61,6 +62,7 @@ public class AdminLoginFrame extends JFrame {
     }
 
     public static void main(String[] args) {
+
         new AdminLoginFrame();
     }
 }

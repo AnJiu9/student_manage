@@ -3,7 +3,9 @@ package com.j.sm.dao.impl;
 import com.j.sm.dao.DepartmentDao;
 import com.j.sm.entity.Department;
 import com.j.sm.utils.JdbcUtil;
+import lombok.Builder;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,5 +41,18 @@ public class DepartmentDaoImpl implements DepartmentDao {
         pstmt.close();
         jdbcUtil.closeConnection();
         return departmentList;
+    }
+
+    @Override
+    public void remove(String name) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "DELETE FROM t_department where department_name = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1,name);
+        pstmt.executeUpdate();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        JOptionPane.showMessageDialog(null,"删除成功");
     }
 }

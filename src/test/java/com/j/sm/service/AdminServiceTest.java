@@ -18,4 +18,5 @@ public class AdminServiceTest {
         assertEquals(0,resultEntity.getCode());
         System.out.println(resultEntity);
     }
+
 }

@@ -22,4 +22,8 @@ public class Admin {
     private String account;
     private String password;
     private String adminName;
+
+    public String getAdminName() {
+        return adminName;
+    }
 }
