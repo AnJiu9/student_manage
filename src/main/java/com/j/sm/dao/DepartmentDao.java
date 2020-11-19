@@ -25,4 +25,13 @@ public interface DepartmentDao {
      * 删除
      */
     void remove(String name)throws SQLException;
+
+    /**
+     * 添加
+     * @param department
+     * @return
+     * @throws SQLException
+     */
+
+    int insertDepartment(Department department) throws SQLException;
 }

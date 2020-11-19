@@ -38,4 +38,15 @@ public class DepartmentServiceImpl implements DepartmentService {
             System.err.println("删除错误");
         }
     }
+
+    @Override
+    public int addDepartment(Department department) {
+        int n = 0;
+        try {
+            n = departmentDao.insertDepartment(department);
+        } catch (SQLException e) {
+            System.err.println("新增院系信息出现异常");
+        }
+        return n;
+    }
 }

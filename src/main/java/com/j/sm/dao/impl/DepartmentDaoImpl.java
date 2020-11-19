@@ -55,4 +55,18 @@ public class DepartmentDaoImpl implements DepartmentDao {
         jdbcUtil.closeConnection();
         JOptionPane.showMessageDialog(null,"删除成功");
     }
+
+    @Override
+    public int insertDepartment(Department department) throws SQLException {
+        JdbcUtil jdbcUtil =JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "INSERT INTO t_department (department_name,logo) VALUES (?,?)";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, department.getDepartmentName());
+        pstmt.setString(2, department.getLogo());
+        int n = pstmt.executeUpdate();
+        pstmt.close();
+        connection.close();
+        return n;
+    }
 }

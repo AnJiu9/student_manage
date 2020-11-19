@@ -21,4 +21,6 @@ public interface DepartmentService {
     List<Department> selectAll();
 
     void remove(String name);
+
+    int addDepartment(Department department);
 }

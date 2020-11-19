@@ -1,13 +1,19 @@
 package com.j.sm.frame;
 
+import com.j.sm.entity.Admin;
 import com.j.sm.entity.Department;
 import com.j.sm.factory.ServiceFactory;
+import com.j.sm.utils.AliOSSUtil;
 
 import javax.swing.*;
 import javax.xml.ws.FaultAction;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -40,9 +46,10 @@ public class MainFrame extends JFrame {
     private JButton 新增院系button;
     private JButton 切换显示button;
     private JPanel contentPanel;
-    private JLabel adminName;
-
+    private JButton 新增button;
     private final CardLayout c;
+    private String uploadFileUrl;
+    private File file;
 
     public MainFrame() {
         init();
@@ -90,6 +97,56 @@ public class MainFrame extends JFrame {
             leftPanel.revalidate();
         });
 
+        depNameField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                depNameField.setText("");
+            }
+        });
+
+        选择图片button.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            //默认打开路径
+            fileChooser.setCurrentDirectory(new File("/Users/orange/Documents/school/java/sm-logo"));
+            //对话框显示的范围在centerPanel内
+            int result = fileChooser.showOpenDialog(centerPanel);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                //选中文件
+                file = fileChooser.getSelectedFile();
+                String name = file.getAbsolutePath();
+                //创建icon对象
+                URL url;
+                ImageIcon icon = new ImageIcon(name);
+                logoLabel.setPreferredSize(new Dimension(150, 150));
+                //图片强制缩放成和JLabel一样大小
+                icon = new ImageIcon(icon.getImage().getScaledInstance(logoLabel.getWidth(), logoLabel.getHeight(), Image.SCALE_DEFAULT));
+                logoLabel.setIcon(icon);
+            }
+        });
+
+        新增button.addActionListener(e -> {
+            //上传文件到OSS并返回url
+            uploadFileUrl = AliOSSUtil.ossUpload(file);
+            //创建Department对象，并设置相应属性
+            Department department = new Department();
+            department.setDepartmentName(depNameField.getText().trim());
+            department.setLogo(uploadFileUrl);
+            //调用service实现新增功能
+            int n = ServiceFactory.getDepartmentServiceInstance().addDepartment(department);
+            if (n == 1) {
+                JOptionPane.showMessageDialog(centerPanel, "新增院系成功");
+                //新增成功后，将侧边栏隐藏
+                leftPanel.setPreferredSize(new Dimension(60, this.getHeight()));
+                addDepPanel.setVisible(false);
+                //刷新界面数据
+                showDepartments();
+                //清空文本框
+                depNameField.setText("");
+                logoLabel.setIcon(null);
+            } else {
+                JOptionPane.showMessageDialog(centerPanel,"新增院系失败");
+            }
+        });
     }
 
     /**
@@ -117,10 +174,10 @@ public class MainFrame extends JFrame {
 //            depPanel.setBorder(BorderFactory.createTitledBorder(department.getDepartmentName()));
             JLabel nameLabel = new JLabel(department.getDepartmentName());
             //新建一个JLabel标签，用来放置院系logo，并指定大小
-            JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() + "' mode = 'widthFit'/></html>");
+            JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() + "' width='220',height='220'/></html>");
             //占位空白标签
             JLabel blankLabel = new JLabel();
-            blankLabel.setPreferredSize(new Dimension(200,30));
+            blankLabel.setPreferredSize(new Dimension(200, 30));
             //删除按钮
             JButton delBtn = new JButton("删除");
             //院系名称加入院系面板
@@ -144,10 +201,10 @@ public class MainFrame extends JFrame {
     }
 
     public void init() {
-        setTitle("管理员：" + this.adminName);
+//        setTitle("管理员：" + this.adminName);
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1080,700);
+        setSize(1080, 700);
 //        setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
