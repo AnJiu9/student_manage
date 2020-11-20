@@ -22,5 +22,5 @@ public interface DepartmentService {
 
     void remove(String name);
 
-    int addDepartment(Department department);
+    int addDepartment(Department departmentId);
 }

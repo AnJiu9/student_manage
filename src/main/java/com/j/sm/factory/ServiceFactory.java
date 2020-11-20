@@ -1,8 +1,10 @@
 package com.j.sm.factory;
 
 import com.j.sm.service.AdminService;
+import com.j.sm.service.ClazzService;
 import com.j.sm.service.DepartmentService;
 import com.j.sm.service.impl.AdminServiceImpl;
+import com.j.sm.service.impl.ClazzServiceImpl;
 import com.j.sm.service.impl.DepartmentServiceImpl;
 
 /**
@@ -19,5 +21,9 @@ public class ServiceFactory {
 
     public static DepartmentService getDepartmentServiceInstance() {
         return new DepartmentServiceImpl();
+    }
+
+    public static ClazzService getClazzServiceInstance() {
+        return new ClazzServiceImpl();
     }
 }

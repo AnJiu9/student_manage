@@ -1,9 +1,11 @@
 package com.j.sm.factory;
 
 import com.j.sm.dao.AdminDao;
+import com.j.sm.dao.ClazzDao;
 import com.j.sm.dao.DepartmentDao;
 import com.j.sm.dao.impl.AdminDaoImpl;
 import com.j.sm.dao.impl.DepartmentDaoImpl;
+import com.j.sm.dao.impl.clazzDaoImpl;
 
 /**
  * @ClassName DaoFactory
@@ -28,5 +30,15 @@ public class DaoFactory {
      */
     public static DepartmentDao getDepartmentDaoInstance() {
         return new DepartmentDaoImpl();
+    }
+
+    /**
+     * 获得ClazzDao实例
+     *
+     * @return ClazzDao实例
+     */
+
+    public static ClazzDao getClazzDaoInstance() {
+        return new clazzDaoImpl();
     }
 }
