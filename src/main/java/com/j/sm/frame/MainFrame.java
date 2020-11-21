@@ -1,11 +1,13 @@
 package com.j.sm.frame;
 
 import com.j.sm.entity.Admin;
+import com.j.sm.entity.Clazz;
 import com.j.sm.entity.Department;
 import com.j.sm.factory.ServiceFactory;
 import com.j.sm.utils.AliOSSUtil;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.ws.FaultAction;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,6 +49,11 @@ public class MainFrame extends JFrame {
     private JButton 切换显示button;
     private JPanel contentPanel;
     private JButton 新增button;
+    private JComboBox<Department> depComboBox;
+    private JTextField searchField;
+    private JButton 新增班级Button;
+    private JPanel treePanel;
+    private JPanel classContentPanel;
     private final CardLayout c;
     private String uploadFileUrl;
     private File file;
@@ -64,9 +71,11 @@ public class MainFrame extends JFrame {
 
         院系管理Button.addActionListener(e -> {
             c.show(centerPanel, "1");
+            showDepartments();
         });
         班级管理Button.addActionListener(e -> {
             c.show(centerPanel, "2");
+            showClazz();
         });
         学生管理Button.addActionListener(e -> {
             c.show(centerPanel, "3");
@@ -144,7 +153,7 @@ public class MainFrame extends JFrame {
                 depNameField.setText("");
                 logoLabel.setIcon(null);
             } else {
-                JOptionPane.showMessageDialog(centerPanel,"新增院系失败");
+                JOptionPane.showMessageDialog(centerPanel, "新增院系失败");
             }
         });
     }
@@ -199,6 +208,71 @@ public class MainFrame extends JFrame {
             });
         }
     }
+
+    public void showClazz() {
+        List<Department> departments = ServiceFactory.getDepartmentServiceInstance().selectAll();
+        showCombobox(departments);
+        showTree(departments);
+        showClazz(departments);
+    }
+
+    private void showCombobox(List<Department> departments) {
+        for (Department department : departments) {
+            depComboBox.addItem(department);
+        }
+    }
+
+    private void showTree(List<Department> departments) {
+        treePanel.removeAll();
+        //左侧树组件到根结点
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("南京工业职业技术大学");
+        for (Department department : departments) {
+            //院系名称作为一级叶子结点
+            DefaultMutableTreeNode group = new DefaultMutableTreeNode(department.getDepartmentName());
+            //加入根结点，构成一棵树
+            root.add(group);
+            List<Clazz> clazzList = ServiceFactory.getClazzServiceInstance().getClazzByDepId(department.getId());
+            for (Clazz clazz : clazzList) {
+                //班级结点加入对应到院系结点
+                DefaultMutableTreeNode node = new DefaultMutableTreeNode(clazz.getClassName());
+                group.add(node);
+            }
+        }
+
+        //以root为根生成树
+        final JTree tree = new JTree(root);
+        tree.setRowHeight(30);
+        tree.setFont(new Font("微软雅黑", Font.PLAIN, 14));
+        treePanel.add(tree, BorderLayout.CENTER);
+        treePanel.revalidate();
+    }
+
+    private void showClazz(List<Department> departments) {
+        classContentPanel.removeAll();
+        classContentPanel.setLayout(new GridLayout(0, 5, 15, 15));
+        Font titleFont = new Font("微软雅黑", Font.PLAIN, 16);
+        for (Department department : departments) {
+            JPanel depPanel = new JPanel();
+            depPanel.setPreferredSize(new Dimension(120, 150));
+            depPanel.setBackground(new Color(63, 98, 131));
+            depPanel.setLayout(new BorderLayout());
+            JLabel depNameLabel = new JLabel(department.getDepartmentName());
+            depNameLabel.setFont(titleFont);
+            depNameLabel.setForeground(new Color(255, 255, 255));
+            depPanel.add(depNameLabel, BorderLayout.NORTH);
+            List<Clazz> clazzList = ServiceFactory.getClazzServiceInstance().getClazzByDepId(department.getId());
+            DefaultListModel<Clazz> listModel = new DefaultListModel<>();
+            for (Clazz clazz : clazzList) {
+                listModel.addElement(clazz);
+            }
+            JList<Clazz> jList = new JList<>(listModel);
+            jList.setBackground(new Color(145,164,186));
+            JScrollPane scrollPane = new JScrollPane(jList);
+            depPanel.add(scrollPane,BorderLayout.CENTER);
+            classContentPanel.add(depPanel);
+        }
+    }
+
 
     public void init() {
 //        setTitle("管理员：" + this.adminName);
