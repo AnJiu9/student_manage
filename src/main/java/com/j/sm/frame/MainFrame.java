@@ -183,7 +183,7 @@ public class MainFrame extends JFrame {
 //            depPanel.setBorder(BorderFactory.createTitledBorder(department.getDepartmentName()));
             JLabel nameLabel = new JLabel(department.getDepartmentName());
             //新建一个JLabel标签，用来放置院系logo，并指定大小
-            JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() + "' width='220',height='220'/></html>");
+            JLabel logoLabel = new JLabel("<html><img src='" + department.getLogo() + "' width='319',height='210'/></html>");
             //占位空白标签
             JLabel blankLabel = new JLabel();
             blankLabel.setPreferredSize(new Dimension(200, 30));
@@ -266,9 +266,9 @@ public class MainFrame extends JFrame {
                 listModel.addElement(clazz);
             }
             JList<Clazz> jList = new JList<>(listModel);
-            jList.setBackground(new Color(145,164,186));
+            jList.setBackground(new Color(167, 186, 199));
             JScrollPane scrollPane = new JScrollPane(jList);
-            depPanel.add(scrollPane,BorderLayout.CENTER);
+            depPanel.add(scrollPane, BorderLayout.CENTER);
             classContentPanel.add(depPanel);
         }
     }
@@ -278,9 +278,9 @@ public class MainFrame extends JFrame {
 //        setTitle("管理员：" + this.adminName);
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1080, 700);
-//        setExtendedState(MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
+//        setSize(1110, 900);
+        setExtendedState(MAXIMIZED_BOTH);
+//        setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
     }
