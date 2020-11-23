@@ -1,6 +1,7 @@
 package com.j.sm.dao;
 
 import com.j.sm.entity.Clazz;
+import com.j.sm.entity.Department;
 import com.j.sm.factory.DaoFactory;
 import org.junit.Test;
 import org.junit.internal.Throwables;
@@ -23,6 +24,21 @@ public class ClazzDaoTest {
             throwables.printStackTrace();
         }
         System.out.println(clazzList);
+    }
+
+    @Test
+    public void insert() {
+        int n = 0;
+        Clazz clazz = Clazz.builder()
+                .departmentId(6)
+                .className("动漫2011")
+                .build();
+        try {
+            n = clazzDao.insertClazz(clazz);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertEquals(1,n);
     }
 
 }

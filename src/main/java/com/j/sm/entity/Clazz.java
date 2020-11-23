@@ -1,11 +1,21 @@
 package com.j.sm.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @ClassName Clazz
  * @Description 班级实体类
  * @Author orange
  * @Date 2020-11-20 21:29
  **/
+
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class Clazz {
     private Integer id;

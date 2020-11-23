@@ -16,8 +16,22 @@ public interface ClazzService {
     /**
      * 查询所有班级
      *
-     *
      * @return List<Clazz>
      */
     List<Clazz> getClazzByDepId(int department);
+
+    /**
+     * 新增班级
+     *
+     * @param clazz 班级实体
+     * @return int
+     */
+
+    int addClazz(Clazz clazz);
+
+    /**
+     * 删除班级
+     * @param name 班级名称
+     */
+    int deleteClazz(Integer ID);
 }

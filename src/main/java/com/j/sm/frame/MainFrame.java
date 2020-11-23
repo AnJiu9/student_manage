@@ -10,10 +10,7 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.ws.FaultAction;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -50,13 +47,18 @@ public class MainFrame extends JFrame {
     private JPanel contentPanel;
     private JButton 新增button;
     private JComboBox<Department> depComboBox;
-    private JTextField searchField;
+    private JTextField classNameField;
     private JButton 新增班级Button;
     private JPanel treePanel;
     private JPanel classContentPanel;
     private final CardLayout c;
     private String uploadFileUrl;
     private File file;
+
+    /**
+     * 选择的院系id
+     */
+    private int departmentId = 0;
 
     public MainFrame() {
         init();
@@ -154,6 +156,29 @@ public class MainFrame extends JFrame {
                 logoLabel.setIcon(null);
             } else {
                 JOptionPane.showMessageDialog(centerPanel, "新增院系失败");
+            }
+        });
+
+        //获得下拉框中的院系id
+        depComboBox.addActionListener(e -> {
+            //得到选中项的索引
+            int index = depComboBox.getSelectedIndex();
+            //按照索引取出项，就是一个department对象，然后取出其id
+            departmentId = depComboBox.getItemAt(index).getId();
+        });
+
+        //新增班级
+        新增班级Button.addActionListener(e ->{
+            Clazz clazz = new Clazz();
+            clazz.setDepartmentId(departmentId);
+            clazz.setClassName(classNameField.getText().trim());
+            int n = ServiceFactory.getClazzServiceInstance().addClazz(clazz);
+            if (n == 1) {
+                JOptionPane.showMessageDialog(centerPanel, "新增班级成功");
+                classNameField.setText("");
+                showClazz();
+            } else {
+                JOptionPane.showMessageDialog(centerPanel,"新增班级失败");
             }
         });
     }
@@ -270,6 +295,44 @@ public class MainFrame extends JFrame {
             JScrollPane scrollPane = new JScrollPane(jList);
             depPanel.add(scrollPane, BorderLayout.CENTER);
             classContentPanel.add(depPanel);
+
+            //对每个JList增加弹出菜单
+            JPopupMenu jPopupMenu = new JPopupMenu();
+            JMenuItem modifyItem = new JMenuItem("修改");
+            JMenuItem deleteItem = new JMenuItem("删除");
+            jPopupMenu.add(modifyItem);
+            jPopupMenu.add(deleteItem);
+            jList.add(jPopupMenu);
+
+            jList.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    //选中项对下标
+                    int index = jList.getSelectedIndex();
+                    //点击鼠标右键
+                    if (e.getButton() == 3) {
+                        //在鼠标位置弹出菜单
+                        jPopupMenu.show(jList,e.getX(),e.getY());
+                        //取出选中项的班级对象数据
+                        Clazz clazz = jList.getModel().getElementAt(index);
+                        //对"删除"菜单项添加事件监听
+                        deleteItem.addActionListener(e1 -> {
+                            int choice = JOptionPane.showConfirmDialog(depPanel,"确定删除吗？");
+                            //点击"确定"
+                            if (choice == 0) {
+                                //根据当前班级的id删除
+                                int n = ServiceFactory.getClazzServiceInstance().deleteClazz(clazz.getId());
+                                if (n == 1) {
+                                    //从List数据模型中移除当前项，先从视觉上看到删除效果
+                                    listModel.remove(index);
+                                    //走后端重新调用下数据
+                                    showTree(ServiceFactory.getDepartmentServiceInstance().selectAll());
+                                }
+                            }
+                        });
+                    }
+                }
+            });
         }
     }
 

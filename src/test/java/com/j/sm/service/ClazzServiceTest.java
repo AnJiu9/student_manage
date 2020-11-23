@@ -12,7 +12,8 @@ public class ClazzServiceTest {
 
     @Test
     public void getClazzByDepId() {
-        List<Clazz> list = ServiceFactory.getClazzServiceInstance().getClazzByDepId(5);
+        List<Clazz> list = ServiceFactory.getClazzServiceInstance().getClazzByDepId(6);
         list.forEach(System.out::println);
     }
+
 }
