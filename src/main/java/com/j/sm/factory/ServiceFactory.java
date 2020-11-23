@@ -3,9 +3,11 @@ package com.j.sm.factory;
 import com.j.sm.service.AdminService;
 import com.j.sm.service.ClazzService;
 import com.j.sm.service.DepartmentService;
+import com.j.sm.service.StudentService;
 import com.j.sm.service.impl.AdminServiceImpl;
 import com.j.sm.service.impl.ClazzServiceImpl;
 import com.j.sm.service.impl.DepartmentServiceImpl;
+import com.j.sm.service.impl.StudentServiceImpl;
 
 /**
  * @ClassName ServiceFactory
@@ -25,5 +27,9 @@ public class ServiceFactory {
 
     public static ClazzService getClazzServiceInstance() {
         return new ClazzServiceImpl();
+    }
+
+    public static StudentService getStudentServiceInstance() {
+        return new StudentServiceImpl();
     }
 }

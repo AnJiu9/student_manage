@@ -1,12 +1,16 @@
 package com.j.sm.frame;
 
+import com.j.sm.component.CustomPanel;
 import com.j.sm.entity.Admin;
 import com.j.sm.entity.Clazz;
 import com.j.sm.entity.Department;
 import com.j.sm.factory.ServiceFactory;
 import com.j.sm.utils.AliOSSUtil;
+import com.j.sm.vo.StudentVo;
+import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.ws.FaultAction;
 import java.awt.*;
@@ -51,6 +55,13 @@ public class MainFrame extends JFrame {
     private JButton 新增班级Button;
     private JPanel treePanel;
     private JPanel classContentPanel;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
+    private JTextField searchField;
+    private JButton 搜索Button;
+    private JButton 新增学生Button;
+    private JButton 批量导入Button;
+    private JPanel tablePanel;
     private final CardLayout c;
     private String uploadFileUrl;
     private File file;
@@ -81,6 +92,7 @@ public class MainFrame extends JFrame {
         });
         学生管理Button.addActionListener(e -> {
             c.show(centerPanel, "3");
+            showStudents();
         });
         奖惩管理Button.addActionListener(e -> {
             c.show(centerPanel, "4");
@@ -336,6 +348,67 @@ public class MainFrame extends JFrame {
         }
     }
 
+    private void showStudents() {
+        CustomPanel stuInfoPanel = new CustomPanel("/Users/orange/Documents/school/java/stuInfo_bg3.JPG");
+        stuInfoPanel.setPreferredSize(new Dimension(300,getHeight()));
+        JLabel title = new JLabel("学  生  信  息");
+        title.setFont(new Font("微软雅黑",Font.BOLD,16));
+        title.setForeground(new Color(253, 255, 249));
+        stuInfoPanel.add(title);
+        stuInfoPanel.repaint();
+        studentPanel.add(stuInfoPanel,BorderLayout.EAST);
+
+        //获得学生列表数据
+        List<StudentVo> students = ServiceFactory.getStudentServiceInstance().getAll();
+        //创建表格对象
+        JTable table = new JTable();
+        //创建表格数据类型，并设置给表格
+        DefaultTableModel model = new DefaultTableModel();
+        table.setModel(model);
+        //设置表头内容
+        model.setColumnIdentifiers(new String[]{"学号","院系","班级","姓名","性别","地址","手机号","出生日期","头像"});
+        //遍历list，生成Object数组，数组中的每个元素就是一行记录
+        for (StudentVo student : students) {
+            Object[] object = new Object[]{
+                    student.getId(),student.getDepartmentName(),student.getClassName(),student.getStudentName(),student.getGender(),student.getAddress(),student.getPhone(),student.getBirthday(),student.getAvatar()
+            };
+            //添加到数据模型
+            model.addRow(object);
+        }
+        //设置最后一列不显示在表格中（头像）
+        TableColumn tc = table.getColumnModel().getColumn(8);
+        tc.setMaxWidth(0);
+        tc.setMinWidth(0);
+        //获得表格的表头
+        JTableHeader header = table.getTableHeader();
+        //表头居中
+        DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
+        hr.setHorizontalAlignment(JLabel.CENTER);
+        header.setDefaultRenderer(hr);
+        //设置表头字体
+        header.setPreferredSize(new Dimension(header.getWidth(),40));
+        header.setFont(new Font("楷体",Font.PLAIN,16));
+        //设置表格行高
+        table.setRowHeight(35);
+        //表格背景色
+        table.setBackground(new Color(223,241,234));
+        //表格内容居中
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+        r.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class,r);
+        //表格加入滚动面板，并设置水平和垂直方向均可按需滚动
+        Component table1;
+        JScrollPane scrollPane = new JScrollPane(table,ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        tablePanel.add(scrollPane);
+
+        //表格内容监听，根据点击的行得到不同的数据
+        table.getSelectionModel().addListSelectionListener(e -> {
+            int row = table.getSelectedRow();
+            JOptionPane.showMessageDialog(null,table.getValueAt(row,2).toString() +
+                    table.getValueAt(row,3).toString());
+        });
+
+    }
 
     public void init() {
 //        setTitle("管理员：" + this.adminName);

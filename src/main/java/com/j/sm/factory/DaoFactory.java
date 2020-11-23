@@ -3,9 +3,12 @@ package com.j.sm.factory;
 import com.j.sm.dao.AdminDao;
 import com.j.sm.dao.ClazzDao;
 import com.j.sm.dao.DepartmentDao;
+import com.j.sm.dao.StudentDao;
 import com.j.sm.dao.impl.AdminDaoImpl;
 import com.j.sm.dao.impl.DepartmentDaoImpl;
+import com.j.sm.dao.impl.StudentDaoImpl;
 import com.j.sm.dao.impl.clazzDaoImpl;
+import com.j.sm.vo.StudentVo;
 
 /**
  * @ClassName DaoFactory
@@ -40,5 +43,14 @@ public class DaoFactory {
 
     public static ClazzDao getClazzDaoInstance() {
         return new clazzDaoImpl();
+    }
+
+    /**
+     * 获得StudentDao实例
+     *
+     * @return StudentDao实例
+     */
+    public static StudentDao getStudentDaoInstance() {
+        return new StudentDaoImpl();
     }
 }
