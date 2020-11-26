@@ -16,8 +16,8 @@ public class AdminDaoTest {
     public void findAdminByAccount() {
         Admin admin;
         try {
-            admin = adminDao.findAdminByAccount("taoranran@qq.com");
-            assertEquals("陶然然", admin.getAdminName());
+            admin = adminDao.findAdminByAccount("orange99@qq.com");
+            assertEquals("一只橘子", admin.getAdminName());
             System.out.println(admin);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
