@@ -69,4 +69,30 @@ public class clazzDaoImpl implements ClazzDao {
         JOptionPane.showMessageDialog(null,"删除成功");
         return n;
     }
+
+    @Override
+    public List<Clazz> selectAll() throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "SELECT * FROM t_class ORDER BY id desc";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        List<Clazz> list = convert(rs);
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return list;
+    }
+
+    private List<Clazz> convert(ResultSet rs) throws SQLException {
+        List<Clazz> clazzList = new ArrayList<>();
+        while (rs.next()) {
+            Clazz clazz = new Clazz();
+            clazz.setId(rs.getInt("id"));
+            clazz.setDepartmentId(rs.getInt("department_id"));
+            clazz.setClassName(rs.getString("class_name"));
+            clazzList.add(clazz);
+        }
+        return clazzList;
+    }
 }

@@ -40,4 +40,12 @@ public interface ClazzDao {
      */
     int removeClazz(Integer ID)throws SQLException;
 
+    /**
+     * 查询所有班级
+     *
+     * @return
+     * @throws SQLException
+     */
+    List<Clazz> selectAll() throws SQLException;
+
 }

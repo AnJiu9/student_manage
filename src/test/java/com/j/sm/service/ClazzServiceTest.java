@@ -16,4 +16,10 @@ public class ClazzServiceTest {
         list.forEach(System.out::println);
     }
 
+    @Test
+    public void getAll() {
+        List<Clazz> list = ServiceFactory.getClazzServiceInstance().getAll();
+        list.forEach(System.out::println);
+    }
+
 }

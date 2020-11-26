@@ -235,7 +235,11 @@
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <model>
+                        <item value="请选择院系"/>
+                      </model>
+                    </properties>
                   </component>
                   <component id="512c8" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
                     <constraints>
@@ -243,7 +247,11 @@
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <model>
+                        <item value="请选择班级"/>
+                      </model>
+                    </properties>
                   </component>
                   <component id="ad2" class="javax.swing.JTextField" binding="searchField">
                     <constraints>

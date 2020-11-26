@@ -41,4 +41,14 @@ public class ClazzDaoTest {
         assertEquals(1,n);
     }
 
+    @Test
+    public void selectAll() throws SQLException {
+        List<Clazz> clazzList = clazzDao.selectAll();
+        try {
+            clazzList = clazzDao.selectAll();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        System.out.println(clazzList);
+    }
 }

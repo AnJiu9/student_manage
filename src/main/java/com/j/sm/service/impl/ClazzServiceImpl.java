@@ -51,4 +51,18 @@ public class ClazzServiceImpl implements ClazzService {
         }
         return n;
     }
+
+    @Override
+    public List<Clazz> getAll() {
+        List<Clazz> clazzList = null;
+        try {
+            clazzList = clazzDao.selectAll();
+        } catch (SQLException throwables) {
+            System.out.println("查询所有班级错误");
+        }
+        return clazzList;
+    }
+
+
+
 }

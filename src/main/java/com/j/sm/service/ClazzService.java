@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface ClazzService {
     /**
-     * 查询所有班级
+     * 根据院系ID查询所有班级
      *
      * @return List<Clazz>
      */
@@ -31,7 +31,14 @@ public interface ClazzService {
 
     /**
      * 删除班级
-     * @param name 班级名称
+     * @param ID 班级名称
      */
     int deleteClazz(Integer ID);
+
+    /**
+     * 查询所有班级
+     *
+     * @return
+     */
+    List<Clazz> getAll();
 }
