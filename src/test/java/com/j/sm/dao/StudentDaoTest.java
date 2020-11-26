@@ -16,4 +16,22 @@ public class StudentDaoTest {
         List<StudentVo> list = DaoFactory.getStudentDaoInstance().selectAll();
         list.forEach(System.out::println);
     }
+
+    @Test
+    public void selectByDepId() throws SQLException {
+        List<StudentVo> list = DaoFactory.getStudentDaoInstance().selectByDepId(5);
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void selectByClassId() throws SQLException {
+        List<StudentVo> list = DaoFactory.getStudentDaoInstance().selectByClassId(1);
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    public void selectByKeywords() throws SQLException {
+        List<StudentVo> list = DaoFactory.getStudentDaoInstance().selectByKeywords("刘");
+        list.forEach(System.out::println);
+    }
 }

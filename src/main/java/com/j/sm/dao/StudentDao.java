@@ -20,4 +20,31 @@ public interface StudentDao {
      * @throws SQLException 异常
      */
     List<StudentVo> selectAll() throws SQLException;
+
+    /**
+     * 根据院系id查询学生
+     *
+     * @param depId
+     * @return
+     * @throws SQLException
+     */
+    List<StudentVo> selectByDepId(int depId) throws SQLException;
+
+    /**
+     * 根据班级id查询学生
+     *
+     * @param classId
+     * @return
+     * @throws SQLException
+     */
+    List<StudentVo> selectByClassId(int classId) throws SQLException;
+
+    /**
+     * 根据关键字查询学生
+     *
+     * @param keywords
+     * @return
+     * @throws SQLException
+     */
+    List<StudentVo> selectByKeywords(String keywords) throws SQLException;
 }

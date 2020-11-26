@@ -17,4 +17,23 @@ public class StudentServiceTest {
         List<StudentVo> studentVoList = studentService.getAll();
         studentVoList.forEach(System.out::println);
     }
+
+    @Test
+    public void getByDepId() {
+        List<StudentVo> studentVoList = studentService.getByDepId(5);
+        studentVoList.forEach(System.out::println);
+    }
+
+    @Test
+    public void getByClassId() {
+        List<StudentVo> studentVoList = studentService.getByClassId(1);
+        studentVoList.forEach(System.out::println);
+    }
+
+    @Test
+    public void getByKeywords() {
+        List<StudentVo> studentVoList = studentService.getByKeywords("刘");
+        studentVoList.forEach(System.out::println);
+
+    }
 }
