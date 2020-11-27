@@ -1,5 +1,6 @@
 package com.j.sm.dao;
 
+import com.j.sm.entity.Student;
 import com.j.sm.vo.StudentVo;
 
 import java.sql.SQLException;
@@ -47,4 +48,13 @@ public interface StudentDao {
      * @throws SQLException
      */
     List<StudentVo> selectByKeywords(String keywords) throws SQLException;
+
+    /**
+     * 新增学生
+     *
+     * @param student
+     * @return
+     * @throws SQLException
+     */
+    int insertStudent(Student student)throws SQLException;
 }

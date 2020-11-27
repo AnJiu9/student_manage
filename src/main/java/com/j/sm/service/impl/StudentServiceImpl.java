@@ -64,4 +64,15 @@ public class StudentServiceImpl implements StudentService {
         }
         return studentList;
     }
+
+    @Override
+    public int addStudent(Student student) {
+        int n = 0;
+        try {
+            n = DaoFactory.getStudentDaoInstance().insertStudent(student);
+        } catch (SQLException throwables) {
+            System.err.println("新增学生出现异常");
+        }
+        return n;
+    }
 }

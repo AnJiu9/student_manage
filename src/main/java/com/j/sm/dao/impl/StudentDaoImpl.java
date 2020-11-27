@@ -5,10 +5,7 @@ import com.j.sm.entity.Student;
 import com.j.sm.utils.JdbcUtil;
 import com.j.sm.vo.StudentVo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,5 +131,24 @@ public class StudentDaoImpl implements StudentDao {
             list.add(student);
         }
         return list;
+    }
+
+    @Override
+    public int insertStudent(Student student) throws SQLException {
+        JdbcUtil jdbcUtil =JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "INSERT INTO t_student(class_id,student_name,phone,avatar,gender,birthday,address) VALUES (?,?,?,?,?,?,?);";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1,student.getClassId());;
+        pstmt.setString(2,student.getStudentName());
+        pstmt.setString(3,student.getPhone());
+        pstmt.setString(4,student.getAvatar());
+        pstmt.setInt(5,student.getGender());
+        pstmt.setDate(6, (Date)student.getBirthday());
+        pstmt.setString(7,student.getAddress());
+        int n = pstmt.executeUpdate();
+        pstmt.close();
+        connection.close();
+        return n;
     }
 }

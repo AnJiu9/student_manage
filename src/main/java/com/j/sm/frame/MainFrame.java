@@ -110,11 +110,11 @@ public class MainFrame extends JFrame {
             c.show(centerPanel, "1");
             showDepartments();
         });
+
         班级管理Button.addActionListener(e -> {
             c.show(centerPanel, "2");
             showClazz();
         });
-
 
         学生管理Button.addActionListener(e -> {
             c.show(centerPanel, "3");
@@ -548,7 +548,7 @@ public class MainFrame extends JFrame {
         //遍历list，生成Object数组，数组中的每个元素就是一行记录
         for (StudentVo student : students) {
             Object[] object = new Object[]{
-                    student.getId(), student.getDepartmentName(), student.getClassName(), student.getStudentName(), student.getGender(), student.getAddress(), student.getPhone(), student.getBirthday(), student.getAvatar()
+                    student.getId(), student.getDepartmentName(), student.getClassName(), student.getStudentName(), FormatUtil.formatGender(student.getGender()), student.getAddress(), student.getPhone(), student.getBirthday(), student.getAvatar()
             };
             //添加到数据模型
             model.addRow(object);

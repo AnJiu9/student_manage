@@ -43,4 +43,12 @@ public interface StudentService {
      * @return  List<Student>
      */
     List<StudentVo> getByKeywords(String keywords);
+
+    /**
+     * 新增学生
+     *
+     * @param student
+     * @return
+     */
+    int addStudent(Student student);
 }
