@@ -5,6 +5,7 @@ import com.j.sm.entity.Student;
 import com.j.sm.utils.JdbcUtil;
 import com.j.sm.vo.StudentVo;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,6 +150,20 @@ public class StudentDaoImpl implements StudentDao {
         int n = pstmt.executeUpdate();
         pstmt.close();
         connection.close();
+        return n;
+    }
+
+    @Override
+    public int removeStudent(Integer ID) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection connection = jdbcUtil.getConnection();
+        String sql = "DELETE FROM t_student where id = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1,ID);
+        int n = pstmt.executeUpdate();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        JOptionPane.showMessageDialog(null,"删除成功");
         return n;
     }
 }

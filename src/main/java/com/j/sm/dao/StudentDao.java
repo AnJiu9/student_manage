@@ -57,4 +57,11 @@ public interface StudentDao {
      * @throws SQLException
      */
     int insertStudent(Student student)throws SQLException;
+
+    /**
+     * 删除
+     * @param ID 删除学生
+     * @throws SQLException 异常
+     */
+    int removeStudent(Integer ID)throws SQLException;
 }

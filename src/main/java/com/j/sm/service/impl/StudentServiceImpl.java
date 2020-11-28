@@ -75,4 +75,15 @@ public class StudentServiceImpl implements StudentService {
         }
         return n;
     }
+
+    @Override
+    public int deleteStudent(Integer ID) {
+        int n = 0;
+        try {
+            n = studentDao.removeStudent(ID);
+        } catch (SQLException e) {
+            System.err.println("删除错误");
+        }
+        return n;
+    }
 }

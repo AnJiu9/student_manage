@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -53,6 +54,13 @@ public class StudentServiceTest {
                 .address("江苏省徐州市")
                 .build();
         n = studentService.addStudent(student);
+        assertEquals(1,n);
+    }
+
+    @Test
+    public void delStudent() {
+        int n = 0;
+        n = studentService.deleteStudent(13);
         assertEquals(1,n);
     }
 }

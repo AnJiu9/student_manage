@@ -51,4 +51,11 @@ public interface StudentService {
      * @return
      */
     int addStudent(Student student);
+
+
+    /**
+     * 删除学生
+     * @param ID 学生id
+     */
+    int deleteStudent(Integer ID);
 }
