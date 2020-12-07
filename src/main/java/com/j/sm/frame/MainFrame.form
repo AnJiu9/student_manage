@@ -395,7 +395,16 @@
           <preferredSize width="24" height="40"/>
         </properties>
         <border type="none"/>
-        <children/>
+        <children>
+          <component id="63584" class="javax.swing.JLabel" binding="timeLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Label"/>
+            </properties>
+          </component>
+        </children>
       </grid>
     </children>
   </grid>

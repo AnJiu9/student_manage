@@ -5,6 +5,7 @@ import com.j.sm.entity.Admin;
 import com.j.sm.entity.Clazz;
 import com.j.sm.entity.Department;
 import com.j.sm.factory.ServiceFactory;
+import com.j.sm.task.TimeThread;
 import com.j.sm.utils.AliOSSUtil;
 import com.j.sm.utils.FormatUtil;
 import com.j.sm.vo.StudentVo;
@@ -31,6 +32,7 @@ import java.util.List;
 
 
 public class MainFrame extends JFrame {
+    private final String adminName;
     private JPanel mainPanel;
     private JPanel topPanel;
     private JPanel centerPanel;
@@ -66,6 +68,7 @@ public class MainFrame extends JFrame {
     private JButton 新增学生Button;
     private JButton 批量导入Button;
     private JPanel tablePanel;
+    private JLabel timeLabel;
 
     /**
      * 自定义变量
@@ -84,7 +87,13 @@ public class MainFrame extends JFrame {
      */
     StudentVo studentVo;
 
-    public MainFrame() {
+    public MainFrame(String adminName) {
+        //时间线程
+        TimeThread timeThread = new TimeThread();
+        timeThread.setTimeLabel(timeLabel);
+        timeThread.start();
+
+        this.adminName = adminName;
         init();
 
         studentVo = StudentVo.builder()
@@ -601,7 +610,7 @@ public class MainFrame extends JFrame {
 
 
     public static void main(String[] args) {
-        new MainFrame();
+        new MainFrame("一只橘子");
 
     }
 }
