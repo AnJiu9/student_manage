@@ -69,6 +69,7 @@ public class MainFrame extends JFrame {
     private JButton 批量导入Button;
     private JPanel tablePanel;
     private JLabel timeLabel;
+    private JButton 重置Button;
 
     /**
      * 自定义变量
@@ -82,10 +83,15 @@ public class MainFrame extends JFrame {
      */
     private int departmentId = 0;
 
-    /**
-     * 学生信息展示对象
-     */
-    StudentVo studentVo;
+    private JLabel idLabel;
+    private JLabel avatar;
+    private JTextField depName;
+    private JTextField className;
+    private JTextField stuName;
+    private JLabel gender;
+    private JLabel birthday;
+    private JTextField phone;
+    private JTextField address;
 
     public MainFrame(String adminName) {
         //时间线程
@@ -96,16 +102,16 @@ public class MainFrame extends JFrame {
         this.adminName = adminName;
         init();
 
-        studentVo = StudentVo.builder()
-                .departmentName("院系")
-                .className("班级")
-                .studentName("姓名")
-                .avatar("https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG")
-                .gender((short) 2)
-                .birthday(new Date())
-                .phone("18922209810")
-                .address("江苏省南京市")
-                .build();
+//        studentVo = StudentVo.builder()
+//                .departmentName("院系")
+//                .className("班级")
+//                .studentName("姓名")
+//                .avatar("https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG")
+//                .gender((short) 2)
+//                .birthday(new Date())
+//                .phone("18922209810")
+//                .address("江苏省南京市")
+//                .build();
 
         c = new CardLayout();
         centerPanel.setLayout(c);
@@ -167,8 +173,8 @@ public class MainFrame extends JFrame {
                         if (index != 0) {
                             departmentId = departmentJBox.getItemAt(index).getId();
                             //获取该院系的学生并显示在表格中
-                            List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().selectByDepId(departmentId);
-//                            showStudentTable(studentList);
+                            List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().getByDepId(departmentId);
+                            showStudents(studentList);
                             //二级联动—班级下拉框的内容随着选择院系的不同而变化
                             List<Clazz> clazzes = ServiceFactory.getClazzServiceInstance().getClazzByDepId(departmentId);
                             //一定要先移除之前的数据，否则下拉框内容会叠加
@@ -191,7 +197,7 @@ public class MainFrame extends JFrame {
                     if (index != 0) {
                         int classId = clazzJBox.getItemAt(index).getId();
                         List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().getByClassId(classId);
-//                        showStudentTable(studentList);
+                        showStudents(studentList);
                     }
                 }
             });
@@ -203,47 +209,57 @@ public class MainFrame extends JFrame {
             stuInfoPanel.repaint();
             studentPanel.add(stuInfoPanel, BorderLayout.EAST);
 
-            //提示信息
+            //学号
             JLabel title = new JLabel("学生信息");
             title.setFont(new Font("微软雅黑", Font.BOLD, 18));
             title.setForeground(new Color(57, 59, 60));
             title.setBounds(110,50,100,50);
 
             //头像
-            JLabel avatar = new JLabel("<html><img src='" + studentVo.getAvatar() + " 'width=20%/></html>");
+            JLabel avatar = new JLabel("<html><img src='https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG 'width=50 height=50/></html>");
             avatar.setBounds(120,110,50,50);
 
             //院系
-            JTextField depName = new JTextField(studentVo.getDepartmentName());
+            JTextField depName = new JTextField("未选择");
             depName.setBounds(50,170,200,40);
 
             //班级
-            JTextField className = new JTextField(studentVo.getClassName());
+            JTextField className = new JTextField("未选择");
             className.setBounds(50,220,200,40);
 
             //姓名
-            JTextField stuName = new JTextField(studentVo.getStudentName());
+            JTextField stuName = new JTextField("未选择");
             stuName.setBounds(50,270,200,40);
 
             //性别
-            JLabel gender = new JLabel(FormatUtil.formatGender(studentVo.getGender()));
+            JLabel gender = new JLabel("未选择");
             gender.setBounds(50,320,200,40);
 
             //生日
-            JLabel birthday = new JLabel(FormatUtil.formatDate(studentVo.getBirthday()));
+            JLabel birthday = new JLabel("未选择");
             birthday.setBounds(50,370,200,40);
 
             //电话
-            JTextField phone = new JTextField(studentVo.getPhone());
+            JTextField phone = new JTextField("未选择");
             phone.setBounds(500,420,200,40);
 
             //地址
-            JTextField address = new JTextField(studentVo.getAddress());
+            JTextField address = new JTextField("未选择");
             address.setBounds(50,470,200,40);
 
-            //操作按钮
-            JButton opButton = new JButton("编辑");
-            opButton.setBounds(100,520,120,40);
+            //编辑按钮
+             JButton editBtn = new JButton("编辑");
+            editBtn.setBounds(60, 520, 90, 40);
+            //删除按钮
+            JButton delBtn = new JButton("删除");
+            delBtn.setBounds(160, 520, 90, 40);
+
+            delBtn.addActionListener(ee -> {
+                ServiceFactory.getStudentServiceInstance().deleteById(idLabel.getText());
+                JOptionPane.showMessageDialog(null, "删除成功");
+                showStudents(ServiceFactory.getStudentServiceInstance().getAll());
+                reset();
+            });
 
             stuInfoPanel.add(title);
             stuInfoPanel.add(avatar);
@@ -254,9 +270,16 @@ public class MainFrame extends JFrame {
             stuInfoPanel.add(birthday);
             stuInfoPanel.add(phone);
             stuInfoPanel.add(address);
-            stuInfoPanel.add(opButton);
+            stuInfoPanel.add(editBtn);
+            stuInfoPanel.add(delBtn);
 
 
+        });
+
+        搜索Button.addActionListener(e -> {
+            students = ServiceFactory.getStudentServiceInstance().getByKeywords(searchField.getText().trim());
+            showStudents(students);
+            searchField.setText("");
         });
 
         奖惩管理Button.addActionListener(e -> {
@@ -359,16 +382,42 @@ public class MainFrame extends JFrame {
             }
         });
 
-
-        搜索Button.addActionListener(e -> {
-            students = ServiceFactory.getStudentServiceInstance().getByKeywords(searchField.getText().trim());
-            showStudents(students);
-            searchField.setText("");
+        重置Button.addActionListener(e -> {
+            reset();
         });
+
 
         新增学生Button.addActionListener(e -> {
-
+//            new AddStudentFrame(MainFrame.this);
+//            MainFrame.this.setEnabled(true);
         });
+    }
+
+    private void reset() {
+        //还原表格数据
+        List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().getAll();
+        showStudents(studentList);
+        //院系下拉框还原
+        departmentJBox.setSelectedIndex(0);
+        //班级下拉框还原
+        clazzJBox.setSelectedIndex(0);
+        Clazz tip2 = new Clazz();
+        clazzJBox.addItem(tip2);
+        List<Clazz> clazzList = ServiceFactory.getClazzServiceInstance().getAll();
+        for (Clazz clazz : clazzList) {
+            clazzJBox.addItem(clazz);
+        }
+        //右侧个人信息显示区域数据还原
+        avatar.setText("<html><img src='https://bpic.588ku.com/element_origin_min_pic/19/04/09/e3330d623cad123abc8545573a86cc38.jpg' width=50 height=50/></html>");
+        idLabel.setText("未选择");
+        depName.setText("未选择");
+        className.setText("未选择");
+        stuName.setText("未选择");
+        gender.setText("未选择");
+        birthday.setText("未选择");
+        address.setText("");
+        phone.setText("");
+        searchField.setText("");
     }
 
 
