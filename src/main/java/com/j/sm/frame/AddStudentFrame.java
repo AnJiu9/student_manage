@@ -49,11 +49,11 @@ public class AddStudentFrame extends JFrame{
     public AddStudentFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         setContentPane(rootPanel);
-        rootPanel.setFileName("student.jpg");
+        rootPanel.setFileName("sbz.jpeg");
         rootPanel.repaint();
         setUndecorated(true);
         setTitle("新增学生界面");
-        setSize(1000, 800);
+        setSize(600, 600);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
