@@ -356,6 +356,10 @@ public class MainFrame extends JFrame {
             showStudents(students);
             searchField.setText("");
         });
+
+        新增学生Button.addActionListener(e -> {
+
+        });
     }
 
 
@@ -591,6 +595,7 @@ public class MainFrame extends JFrame {
                     .build();
             System.out.println(studentVo);
         });
+
 
     }
 

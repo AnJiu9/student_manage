@@ -45,7 +45,7 @@ public class StudentServiceTest {
     public  void insert()throws ParseException {
         int n = 0;
         Student student = Student.builder()
-                .classId(1)
+                .classId(20)
                 .studentName("陈云")
                 .phone("18800921176")
                 .avatar("https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG")
@@ -53,14 +53,25 @@ public class StudentServiceTest {
                 .birthday(FormatUtil.parseDate("2001-9-8"))
                 .address("江苏省徐州市")
                 .build();
-        n = studentService.addStudent(student);
+        n = studentService.insertStudent(student);
         assertEquals(1,n);
     }
 
     @Test
     public void delStudent() {
         int n = 0;
-        n = studentService.deleteStudent(13);
+        n = studentService.deleteById("11");
         assertEquals(1,n);
+    }
+
+
+    @Test
+    public void updateStudent() {
+        Student student = new Student();
+        student.setId("18");
+        student.setAddress("浙江省温州市");
+        student.setPhone("13100001111");
+        int n = studentService.updateStudent(student);
+        assertEquals(1, n);
     }
 }

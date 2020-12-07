@@ -45,17 +45,43 @@ public interface StudentService {
     List<StudentVo> getByKeywords(String keywords);
 
     /**
-     * 新增学生
+     * 更新学生信息
      *
-     * @param student
-     * @return
+     * @param student 学生对象
+     * @return int
      */
-    int addStudent(Student student);
-
+    int updateStudent(Student student);
 
     /**
      * 删除学生
-     * @param ID 学生id
+     *
+     * @param id id
+     * @return int
      */
-    int deleteStudent(Integer ID);
+    int deleteById(String id);
+
+    /**
+     * 新增学生
+     *
+     * @param student 学生对象
+     * @return int
+     */
+    int insertStudent(Student student);
+
+    /**
+     * 根据院系统计学生数
+     *
+     * @param departmentId 院系id
+     * @return 学生数量
+     */
+    int countByDepartmentId(int departmentId);
+
+    /**
+     * 根据班级统计学生数量
+     *
+     * @param classId 班级id
+     * @return 学生数量
+     */
+    int countStudentByClassId(int classId);
+
 }

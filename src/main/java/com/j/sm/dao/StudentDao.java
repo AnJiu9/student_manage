@@ -52,16 +52,46 @@ public interface StudentDao {
     /**
      * 新增学生
      *
-     * @param student
-     * @return
-     * @throws SQLException
+     * @param student 入参
+     * @return int
+     * @throws SQLException 异常
      */
     int insertStudent(Student student)throws SQLException;
 
     /**
-     * 删除
-     * @param ID 删除学生
+     * 根据id删除学生
+     *
+     * @param id 学生id
+     * @return int
      * @throws SQLException 异常
      */
-    int removeStudent(Integer ID)throws SQLException;
+    int deleteById(String id) throws SQLException;
+
+
+    /**
+     * 更新学生信息
+     *
+     * @param student 入参
+     * @return int
+     * @throws SQLException 异常
+     */
+    int updateStudent(Student student) throws SQLException;
+
+    /**
+     * 根据院系id统计学生人数
+     *
+     * @param departmentId 院系id
+     * @return int
+     * @throws SQLException 异常
+     */
+    int countByDepartmentId(int departmentId) throws SQLException;
+
+    /**
+     * 根据班级id统计生人数
+     *
+     * @param classId 班级id
+     * @return int
+     * @throws SQLException 异常
+     */
+    int countByClassId(int classId) throws SQLException;
 }

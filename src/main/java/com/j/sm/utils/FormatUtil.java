@@ -21,8 +21,6 @@ public class FormatUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse(dateString);
         java.sql.Date sqlDate=new java.sql.Date(date.getTime());
-//        } catch (ParseException e) {
-//        Date date = null;
 //        try {
 //            date = sdf.parse(dateString);
 //            java.sql.Date sqlDate=new java.sql.Date(date.getTime());

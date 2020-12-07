@@ -43,23 +43,33 @@ public class StudentDaoTest {
     }
 
     @Test
-    public void insert() throws ParseException {
-        int n = 0;
-        Student student = Student.builder()
-                .classId(1)
-                .studentName("朱曼玉")
-                .phone("18800921176")
-                .avatar("https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG")
-                .gender((short) 2)
-                .birthday(FormatUtil.parseDate("2001-9-8"))
-                .address("江苏省徐州市")
-                .build();
-        try {
-            n = studentDao.insertStudent(student);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        assertEquals(1,n);
+    public void insert() throws SQLException {
+        Student student = new Student();
+        student.setId("12");
+        student.setClassId(18);
+        student.setStudentName("嘉弈");
+        student.setAvatar("https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180459.JPG");
+        student.setBirthday(new Date());
+        student.setGender((short) 1);
+        student.setPhone("13899991111");
+        student.setAddress("四川省成都市");
+        int n = studentDao.insertStudent(student);
+        assertEquals(1, n);
     }
 
+    @Test
+    public void updateStudent() throws SQLException {
+        Student student = new Student();
+        student.setId("12");
+        student.setAddress("浙江省温州市");
+        student.setPhone("13100001111");
+        int n = studentDao.updateStudent(student);
+        assertEquals(1, n);
+    }
+
+    @Test
+    public void deleteById() throws SQLException {
+        int n = studentDao.deleteById("12");
+        assertEquals(1, n);
+    }
 }

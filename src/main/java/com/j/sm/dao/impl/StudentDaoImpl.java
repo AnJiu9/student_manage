@@ -136,34 +136,88 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public int insertStudent(Student student) throws SQLException {
-        JdbcUtil jdbcUtil =JdbcUtil.getInitJdbcUtil();
-        Connection connection = jdbcUtil.getConnection();
-        String sql = "INSERT INTO t_student(class_id,student_name,phone,avatar,gender,birthday,address) VALUES (?,?,?,?,?,?,?);";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1,student.getClassId());;
-        pstmt.setString(2,student.getStudentName());
-        pstmt.setString(3,student.getPhone());
-        pstmt.setString(4,student.getAvatar());
-        pstmt.setInt(5,student.getGender());
-        pstmt.setDate(6, (Date)student.getBirthday());
-        pstmt.setString(7,student.getAddress());
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection conn = jdbcUtil.getConnection();
+        String sql = "INSERT INTO t_student VALUES (?,?,?,?,?,?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, student.getId());
+        pstmt.setInt(2, student.getClassId());
+        pstmt.setString(3, student.getStudentName());
+        pstmt.setString(4, student.getPhone());
+        pstmt.setString(5, student.getAvatar());
+        pstmt.setShort(6, student.getGender());
+        pstmt.setObject(7, student.getBirthday());
+        pstmt.setString(8, student.getAddress());
         int n = pstmt.executeUpdate();
         pstmt.close();
-        connection.close();
+        conn.close();
         return n;
     }
 
     @Override
-    public int removeStudent(Integer ID) throws SQLException {
+    public int deleteById(String id) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
-        Connection connection = jdbcUtil.getConnection();
-        String sql = "DELETE FROM t_student where id = ?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1,ID);
+        Connection conn = jdbcUtil.getConnection();
+        String sql = "DELETE FROM t_student WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, id);
         int n = pstmt.executeUpdate();
         pstmt.close();
-        jdbcUtil.closeConnection();
-        JOptionPane.showMessageDialog(null,"删除成功");
+        conn.close();
         return n;
     }
+
+    @Override
+    public int updateStudent(Student student) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection conn = jdbcUtil.getConnection();
+        String sql = "UPDATE t_student SET address = ?,phone = ? WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, student.getAddress());
+        pstmt.setString(2, student.getPhone());
+        pstmt.setString(3, student.getId());
+        int n = pstmt.executeUpdate();
+        pstmt.close();
+        conn.close();
+        return n;
+    }
+
+    @Override
+    public int countByDepartmentId(int departmentId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection conn = jdbcUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM t_student t1 \n" +
+                "LEFT JOIN t_class t2 \n" +
+                "ON t1.class_id = t2.id\n" +
+                "LEFT JOIN t_department t3 \n" +
+                "ON t2.department_id = t3.id\n" +
+                "WHERE t3.id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, departmentId);
+        ResultSet rs = pstmt.executeQuery();
+        int rowcount = 0;
+        if (rs.next()) {
+            rowcount = rs.getInt(1);
+        }
+        rs.close();
+        pstmt.close();
+        jdbcUtil.closeConnection();
+        return rowcount;
+    }
+
+    @Override
+    public int countByClassId(int classId) throws SQLException {
+        JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
+        Connection conn = jdbcUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM t_student  WHERE class_id=? ";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, classId);
+        ResultSet rs = pstmt.executeQuery();
+        int rowCount = 0;
+        if (rs.next()) {
+            rowCount = rs.getInt(1);
+        }
+        return rowCount;
+    }
+
 }
