@@ -373,7 +373,7 @@ public class MainFrame extends JFrame {
 
 
     public void init() {
-//        setTitle("管理员：" + this.adminName);
+        setTitle("管理员：" + this.adminName);
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        setSize(1110, 900);

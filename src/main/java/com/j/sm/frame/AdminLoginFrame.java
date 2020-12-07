@@ -44,9 +44,9 @@ public class AdminLoginFrame extends JFrame {
 
             JOptionPane.showMessageDialog(mainPanel, resultEntity.getMessage());
             if (resultEntity.getCode() == 0) {
+                this.dispose();
 //                System.out.println(((Admin)resultEntity.getData()).getAdminName());
                 Admin admin = (Admin) resultEntity.getData();
-                this.dispose();
                 new MainFrame(admin.getAdminName());
             } else {
                 accountField.setText("");
