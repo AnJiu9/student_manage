@@ -137,12 +137,64 @@ public class MainFrame extends JFrame {
                 departmentJBox.addItem(department);
             }
 
-            //初始化班级下拉框数据、
-            clazzJBox.addItem(Clazz.builder().className("请选择班级").build());
+            //两个下拉框初始化提示数据，因为里面元素都是对象，所以这样进行了处理
+            Department tip1 = new Department();
+            tip1.setDepartmentName("请选择院系");
+            departmentJBox.addItem(tip1);
+            Clazz tip2 = new Clazz();
+            tip2.setClassName("请选择班级");
+            clazzJBox.addItem(tip2);
+
+            //初始化院系下拉框数据
+            List<Department> departmentList = ServiceFactory.getDepartmentServiceInstance().selectAll();
+            for (Department department : departmentList) {
+                departmentJBox.addItem(department);
+            }
+
+            //初始化班级下拉框数据
             List<Clazz> clazzes = ServiceFactory.getClazzServiceInstance().getAll();
             for (Clazz clazz : clazzes) {
                 clazzJBox.addItem(clazz);
             }
+
+            //院系下拉框监听，选中哪项，表格中显示该院系所有学生，并级联查出该院系的所有班级，更新到班级下拉框
+            departmentJBox.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        int index = departmentJBox.getSelectedIndex();
+                        //排除第一项，那是提示信息，不能作为查询依据
+                        if (index != 0) {
+                            departmentId = departmentJBox.getItemAt(index).getId();
+                            //获取该院系的学生并显示在表格中
+                            List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().selectByDepId(departmentId);
+//                            showStudentTable(studentList);
+                            //二级联动—班级下拉框的内容随着选择院系的不同而变化
+                            List<Clazz> clazzes = ServiceFactory.getClazzServiceInstance().getClazzByDepId(departmentId);
+                            //一定要先移除之前的数据，否则下拉框内容会叠加
+                            clazzJBox.removeAllItems();
+                            Clazz tip = new Clazz();
+                            tip.setClassName("请选择班级");
+                            clazzJBox.addItem(tip);
+                            for (Clazz clazz : clazzes) {
+                                clazzJBox.addItem(clazz);
+                            }
+                        }
+                    }
+                }
+            });
+
+            //班级下拉框监听，可以根据选中的班级显示所有学生
+            clazzJBox.addItemListener(e1 -> {
+                if (e1.getStateChange() == ItemEvent.SELECTED) {
+                    int index = clazzJBox.getSelectedIndex();
+                    if (index != 0) {
+                        int classId = clazzJBox.getItemAt(index).getId();
+                        List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().getByClassId(classId);
+//                        showStudentTable(studentList);
+                    }
+                }
+            });
 
             //右侧个人信息面板
             CustomPanel stuInfoPanel = new CustomPanel("/Users/orange/Documents/school/java/stuInfo_bg.png");
@@ -204,59 +256,7 @@ public class MainFrame extends JFrame {
             stuInfoPanel.add(address);
             stuInfoPanel.add(opButton);
 
-            //院系下拉框监听
-            departmentJBox.addItemListener(e1 -> {
-                if (e1.getStateChange() == ItemEvent.SELECTED) {
-                    //排除第一条数据
-                    int index = departmentJBox.getSelectedIndex();
-                    if (index != 0) {
-                        //得到选中项的id，就是某个院系的id
-                        Integer depId = departmentJBox.getItemAt(index).getId();
-                        //过滤出这个学院的所有学生
-                        students = ServiceFactory.getStudentServiceInstance().getByDepId(depId);
-                        showStudents(students);
-                        //根据院系id查询所有班级
-                        List<Clazz> clazzList = ServiceFactory.getClazzServiceInstance().getClazzByDepId(depId);
-                        //移除之前的数据，重新构造
-                        clazzJBox.removeAllItems();
-                        clazzJBox.addItem(Clazz.builder().className("请选择班级").build());
-                        for (Clazz clazz : clazzList) {
-                            clazzJBox.addItem(clazz);
-                        }
-                    } else {
-                        //选中"请选择院系"第一项，复原学生表格数据
-                        students = ServiceFactory.getStudentServiceInstance().getAll();
-                        showStudents(students);
-                        //复原班级下拉框数据
-                        clazzJBox.removeAllItems();
-                        clazzJBox.addItem(Clazz.builder().className("请选择班级").build());
-                        List<Clazz> clazzList = ServiceFactory.getClazzServiceInstance().getAll();
-                        for (Clazz clazz : clazzList) {
-                            clazzJBox.addItem(clazz);
-                        }
-                    }
-                }
-            });
 
-            //班级下拉框监听
-            clazzJBox.addItemListener(e2 -> {
-                if (e2.getStateChange() == ItemEvent.SELECTED) {
-                    int index = clazzJBox.getSelectedIndex();
-                    if (index != 0) {
-                        Integer classId = clazzJBox.getItemAt(index).getId();
-                        List<StudentVo> studentList = ServiceFactory.getStudentServiceInstance().getByClassId(classId);
-                        showStudents(studentList);
-                    } else {
-                        //复原数据
-                        clazzJBox.removeAllItems();
-                        clazzJBox.addItem(Clazz.builder().className("请选择班级").build());
-                        List<Clazz> clazzList = ServiceFactory.getClazzServiceInstance().getAll();
-                        for (Clazz clazz : clazzList) {
-                            clazzJBox.addItem(clazz);
-                        }
-                    }
-                }
-            });
         });
 
         奖惩管理Button.addActionListener(e -> {
@@ -370,6 +370,7 @@ public class MainFrame extends JFrame {
 
         });
     }
+
 
 
     public void init() {
