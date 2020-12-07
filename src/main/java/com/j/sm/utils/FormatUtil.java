@@ -39,4 +39,14 @@ public class FormatUtil {
             return "女";
         }
     }
+
+    public static Short formatGender(String gender) {
+        if ("保密".equals(gender)) {
+            return 0;
+        } else if ("男".equals(gender)) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
 }

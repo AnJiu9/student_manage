@@ -388,8 +388,8 @@ public class MainFrame extends JFrame {
 
 
         新增学生Button.addActionListener(e -> {
-//            new AddStudentFrame(MainFrame.this);
-//            MainFrame.this.setEnabled(true);
+            new AddStudentFrame(MainFrame.this);
+            MainFrame.this.setEnabled(true);
         });
     }
 
@@ -586,7 +586,7 @@ public class MainFrame extends JFrame {
         }
     }
 
-    private void showStudents(List<StudentVo> students) {
+    void showStudents(List<StudentVo> students) {
 //        CustomPanel stuInfoPanel = new CustomPanel("/Users/orange/Documents/school/java/stuInfo_bg.JPG");
 //        stuInfoPanel.setPreferredSize(new Dimension(300,getHeight()));
 //        JLabel title = new JLabel("学  生  信  息");

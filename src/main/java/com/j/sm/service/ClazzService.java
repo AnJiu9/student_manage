@@ -1,7 +1,6 @@
 package com.j.sm.service;
 
 import com.j.sm.entity.Clazz;
-import com.j.sm.entity.Department;
 
 import java.util.List;
 
