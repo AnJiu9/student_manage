@@ -24,7 +24,7 @@ public interface DepartmentDao {
     /**
      * 删除
      */
-    void remove(String name)throws SQLException;
+    int remove(int depId)throws SQLException;
 
     /**
      * 添加

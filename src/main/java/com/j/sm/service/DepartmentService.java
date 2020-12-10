@@ -20,7 +20,7 @@ public interface DepartmentService {
      */
     List<Department> selectAll();
 
-    void remove(String name);
+    int remove(int depId);
 
     int addDepartment(Department departmentId);
 }

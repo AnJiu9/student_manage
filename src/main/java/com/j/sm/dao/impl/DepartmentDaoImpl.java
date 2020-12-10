@@ -44,16 +44,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public void remove(String name) throws SQLException {
+    public int remove(int depId) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection connection = jdbcUtil.getConnection();
-        String sql = "DELETE FROM t_department where department_name = ?";
+        String sql = "DELETE FROM t_department WHERE id = ? ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1,name);
-        pstmt.executeUpdate();
-        pstmt.close();
-        jdbcUtil.closeConnection();
-        JOptionPane.showMessageDialog(null,"删除成功");
+        pstmt.setInt(1, depId);
+        return pstmt.executeUpdate();
     }
 
     @Override

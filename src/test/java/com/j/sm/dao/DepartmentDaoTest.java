@@ -41,4 +41,16 @@ public class DepartmentDaoTest {
         }
         assertEquals(1,n);
     }
+
+    @Test
+    public void delete() {
+        int n = 0;
+        try {
+            n = departmentDao.remove(9);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertEquals(1, n);
+    }
+
 }

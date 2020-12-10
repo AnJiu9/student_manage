@@ -31,12 +31,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void remove(String name) {
+    public int remove(int depId) {
+        int n = 0;
         try {
-            departmentDao.remove(name);
+           n = departmentDao.remove(depId);
         } catch (SQLException e) {
             System.err.println("删除错误");
         }
+        return n;
     }
 
     @Override

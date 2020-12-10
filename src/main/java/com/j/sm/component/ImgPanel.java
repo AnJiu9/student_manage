@@ -19,7 +19,7 @@ public class ImgPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        ImageIcon icon = new ImageIcon("src/main/resources/img/" + fileName);
+        ImageIcon icon = new ImageIcon("/Users/orange/Documents/student-manage/src/main/resources/image/" + fileName);
         Image image = icon.getImage();
         g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), icon.getImageObserver());
     }

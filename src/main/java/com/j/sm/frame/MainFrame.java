@@ -1,9 +1,11 @@
 package com.j.sm.frame;
 
+import com.eltima.components.ui.DatePicker;
 import com.j.sm.component.CustomPanel;
 import com.j.sm.entity.Admin;
 import com.j.sm.entity.Clazz;
 import com.j.sm.entity.Department;
+import com.j.sm.entity.Student;
 import com.j.sm.factory.ServiceFactory;
 import com.j.sm.task.TimeThread;
 import com.j.sm.utils.AliOSSUtil;
@@ -15,12 +17,15 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.xml.ws.FaultAction;
+import javax.xml.ws.Service;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @ClassName MainFrame
@@ -83,7 +88,8 @@ public class MainFrame extends JFrame {
      */
     private int departmentId = 0;
 
-    private JLabel idLabel;
+    private CustomPanel stuInfoPanel;
+    private JLabel title;
     private JLabel avatar;
     private JTextField depName;
     private JTextField className;
@@ -92,6 +98,9 @@ public class MainFrame extends JFrame {
     private JLabel birthday;
     private JTextField phone;
     private JTextField address;
+    private JButton editBtn;
+    private JButton delBtn;
+
 
     public MainFrame(String adminName) {
         //时间线程
@@ -203,59 +212,94 @@ public class MainFrame extends JFrame {
             });
 
             //右侧个人信息面板
-            CustomPanel stuInfoPanel = new CustomPanel("/Users/orange/Documents/school/java/stuInfo_bg.png");
+            stuInfoPanel = new CustomPanel("/Users/orange/Documents/school/java/stuInfo_bg.png");
             stuInfoPanel.setPreferredSize(new Dimension(300, getHeight()));
             stuInfoPanel.setLayout(null);
             stuInfoPanel.repaint();
             studentPanel.add(stuInfoPanel, BorderLayout.EAST);
 
             //学号
-            JLabel title = new JLabel("学生信息");
+            title = new JLabel("学生信息");
             title.setFont(new Font("微软雅黑", Font.BOLD, 18));
             title.setForeground(new Color(57, 59, 60));
             title.setBounds(110,50,100,50);
 
             //头像
-            JLabel avatar = new JLabel("<html><img src='https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG 'width=50 height=50/></html>");
+            avatar = new JLabel("<html><img src='https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG 'width=50 height=50/></html>");
             avatar.setBounds(120,110,50,50);
 
             //院系
-            JTextField depName = new JTextField("未选择");
+            depName = new JTextField("未选择");
             depName.setBounds(50,170,200,40);
 
             //班级
-            JTextField className = new JTextField("未选择");
+            className = new JTextField("未选择");
             className.setBounds(50,220,200,40);
 
             //姓名
-            JTextField stuName = new JTextField("未选择");
+            stuName = new JTextField("未选择");
             stuName.setBounds(50,270,200,40);
 
             //性别
-            JLabel gender = new JLabel("未选择");
+            gender = new JLabel("未选择");
             gender.setBounds(50,320,200,40);
 
             //生日
-            JLabel birthday = new JLabel("未选择");
-            birthday.setBounds(50,370,200,40);
+            birthday = new JLabel("未选择");
+            birthday.setBounds(50,370,180,40);
 
             //电话
-            JTextField phone = new JTextField("未选择");
-            phone.setBounds(500,420,200,40);
+            phone = new JTextField("未选择");
+            phone.setBounds(50,420,200,40);
+            phone.setEnabled(false);
 
             //地址
-            JTextField address = new JTextField("未选择");
+            address = new JTextField("未选择");
             address.setBounds(50,470,200,40);
+            address.setEnabled(false);
 
             //编辑按钮
-             JButton editBtn = new JButton("编辑");
+            editBtn = new JButton("编辑");
             editBtn.setBounds(60, 520, 90, 40);
             //删除按钮
-            JButton delBtn = new JButton("删除");
+            delBtn = new JButton("删除");
             delBtn.setBounds(160, 520, 90, 40);
 
+            AtomicBoolean flag = new AtomicBoolean(true);
+            editBtn.addActionListener(edit -> {
+                if (flag.get()) {
+//                    stuName.setEnabled(true);
+//                    gender.setEnabled(true);
+//                    birthday.setEnabled(true);
+                    phone.setEnabled(true);
+                    address.setEnabled(true);
+                    flag.set(false);
+                } else {
+//                    ServiceFactory.getStudentServiceInstance().updateStudent(idLabel.getText(), "student_name", stuName.getText());
+//                    ServiceFactory.getStudentServiceInstance().renewStudentInfo(idLabel.getText(), "gender", genderIntoId(gender.getText()));
+//                    ServiceFactory.getStudentServiceInstance().renewStudentInfo(idLabel.getText(), "birthday", birthday.getText());
+                    Student student = new Student();
+                    student.setId(title.getText());
+                    student.setPhone(phone.getText());
+                    student.setAddress(address.getText());
+                    int n = ServiceFactory.getStudentServiceInstance().updateStudent(student);
+                    if (n == 1) {
+                        JOptionPane.showMessageDialog(mainPanel, "修改成功");
+                    }
+//                    ServiceFactory.getStudentServiceInstance().updateStudent(title.getText(), "phone", phone.getText());
+//                    ServiceFactory.getStudentServiceInstance().updateStudent(idLabel.getText(), "address", address.getText());
+                    showStudents(ServiceFactory.getStudentServiceInstance().getAll());
+                    flag.set(true);
+//                    stuName.setEnabled(false);
+//                    gender.setEnabled(false);
+//                    birthday.setEnabled(false);
+                    phone.setEnabled(false);
+                    address.setEnabled(false);
+                }
+            });
+
             delBtn.addActionListener(ee -> {
-                ServiceFactory.getStudentServiceInstance().deleteById(idLabel.getText());
+                ServiceFactory.getStudentServiceInstance().deleteById(title.getText());
                 JOptionPane.showMessageDialog(null, "删除成功");
                 showStudents(ServiceFactory.getStudentServiceInstance().getAll());
                 reset();
@@ -408,15 +452,15 @@ public class MainFrame extends JFrame {
             clazzJBox.addItem(clazz);
         }
         //右侧个人信息显示区域数据还原
-        avatar.setText("<html><img src='https://bpic.588ku.com/element_origin_min_pic/19/04/09/e3330d623cad123abc8545573a86cc38.jpg' width=50 height=50/></html>");
-        idLabel.setText("未选择");
+        avatar.setText("<html><img src='https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG' width=50 height=50/></html>");
+        title.setText("未选择");
         depName.setText("未选择");
         className.setText("未选择");
         stuName.setText("未选择");
         gender.setText("未选择");
         birthday.setText("未选择");
-        address.setText("");
-        phone.setText("");
+        address.setText("未选择");
+        phone.setText("未选择");
         searchField.setText("");
     }
 
@@ -477,9 +521,16 @@ public class MainFrame extends JFrame {
 
             //删除
             delBtn.addActionListener(e -> {
-                String nameLabelText = nameLabel.getText();
-                ServiceFactory.getDepartmentServiceInstance().remove(nameLabelText);
-                showDepartments();
+                int result = JOptionPane.showConfirmDialog(this, "确认要删除吗？");
+                if (result == 0) {
+                    int n = ServiceFactory.getDepartmentServiceInstance().remove(department.getId());
+                    if (n == 1) {
+                        JOptionPane.showMessageDialog(this, "删除成功");
+                        showDepartments();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "删除失败");
+                }
             });
         }
     }
@@ -585,50 +636,34 @@ public class MainFrame extends JFrame {
             });
         }
     }
-
-    void showStudents(List<StudentVo> students) {
-//        CustomPanel stuInfoPanel = new CustomPanel("/Users/orange/Documents/school/java/stuInfo_bg.JPG");
-//        stuInfoPanel.setPreferredSize(new Dimension(300,getHeight()));
-//        JLabel title = new JLabel("学  生  信  息");
-//        title.setFont(new Font("微软雅黑",Font.BOLD,16));
-//        title.setForeground(new Color(253, 255, 249));
-//        stuInfoPanel.add(title);
-//        stuInfoPanel.repaint();
-//        studentPanel.add(stuInfoPanel,BorderLayout.EAST);
-
-//        //获得学生列表数据
-//        List<StudentVo> students = ServiceFactory.getStudentServiceInstance().getAll();
-
-        //移除表格
+    public void showStudents(List<StudentVo> studentList) {
         tablePanel.removeAll();
-        //创建表格对象
+        //创建表格
         JTable table = new JTable();
-        //创建表格数据类型，并设置给表格
+        //表格数据模型
         DefaultTableModel model = new DefaultTableModel();
         table.setModel(model);
-        //设置表头内容
+        //表头内容
         model.setColumnIdentifiers(new String[]{"学号", "院系", "班级", "姓名", "性别", "地址", "手机号", "出生日期", "头像"});
-        //遍历list，生成Object数组，数组中的每个元素就是一行记录
-        for (StudentVo student : students) {
-            Object[] object = new Object[]{
-                    student.getId(), student.getDepartmentName(), student.getClassName(), student.getStudentName(), FormatUtil.formatGender(student.getGender()), student.getAddress(), student.getPhone(), student.getBirthday(), student.getAvatar()
-            };
-            //添加到数据模型
+        //遍历List,转成Object数组
+        for (StudentVo student : studentList) {
+            Object[] object = new Object[]{student.getId(), student.getDepartmentName(), student.getClassName(), student.getStudentName(), FormatUtil.formatGender(student.getGender()), student.getAddress(), student.getPhone(), student.getBirthday(), student.getAvatar()};
             model.addRow(object);
         }
-        //设置最后一列不显示在表格中（头像）
+        //将最后一列隐藏头像地址不显示在表格中
         TableColumn tc = table.getColumnModel().getColumn(8);
-        tc.setMaxWidth(0);
         tc.setMinWidth(0);
-        //获得表格的表头
-        JTableHeader header = table.getTableHeader();
+        tc.setMaxWidth(0);
+        //获得表头
+        JTableHeader head = table.getTableHeader();
         //表头居中
         DefaultTableCellHeaderRenderer hr = new DefaultTableCellHeaderRenderer();
         hr.setHorizontalAlignment(JLabel.CENTER);
-        header.setDefaultRenderer(hr);
+        head.setDefaultRenderer(hr);
+        //设置表头大小
+        head.setPreferredSize(new Dimension(head.getWidth(), 40));
         //设置表头字体
-        header.setPreferredSize(new Dimension(header.getWidth(), 40));
-        header.setFont(new Font("楷体", Font.PLAIN, 16));
+        head.setFont(new Font("楷体", Font.PLAIN, 16));
         //设置表格行高
         table.setRowHeight(35);
         //表格背景色
@@ -637,27 +672,25 @@ public class MainFrame extends JFrame {
         DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class, r);
-        //表格加入滚动面板，并设置水平和垂直方向均可按需滚动
-        Component table1;
-        JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //表格加入滚动面板,水平垂直方向带滚动条
+        JScrollPane scrollPane = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         tablePanel.add(scrollPane);
         tablePanel.revalidate();
-
-        //表格内容监听，根据点击的行得到不同的数据
+        //表格内容选择监听，点击一行，在右边显示这个学生信息
         table.getSelectionModel().addListSelectionListener(e -> {
             int row = table.getSelectedRow();
-            StudentVo studentVo = StudentVo.builder()
-                    .className(table.getValueAt(row,2).toString())
-                    .studentName(table.getValueAt(row,3).toString())
-                    .phone(table.getValueAt(row,6).toString())
-                    .address(table.getValueAt(row,5).toString())
-                    .build();
-            System.out.println(studentVo);
-        });
-
-
-    }
-
+            title.setText(table.getValueAt(row, 0).toString());
+            depName.setText(table.getValueAt(row, 1).toString());
+            className.setText(table.getValueAt(row, 2).toString());
+            stuName.setText(table.getValueAt(row, 3).toString());
+            gender.setText(table.getValueAt(row, 4).toString());
+            address.setText(table.getValueAt(row, 5).toString());
+            phone.setText(table.getValueAt(row, 6).toString());
+            birthday.setText(table.getValueAt(row, 7).toString());
+            avatar.setText("<html><img src='" + table.getValueAt(row, 8).toString() + "' width=50 height=50/></html>");
+    });
+}
 
     public static void main(String[] args) {
         new MainFrame("一只橘子");

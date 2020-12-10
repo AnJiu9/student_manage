@@ -11,49 +11,56 @@ import com.j.sm.vo.StudentVo;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Console;
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
  * @ClassName AddStudentFrame
  * @Description
  * @Author orange
- * @Date 2020-12-08 01:55
+ * @Date 2020-12-09 22:04
  **/
 
 public class AddStudentFrame extends JFrame{
-    private JPanel panel1;
     private ImgPanel rootPanel;
     private JTextField idField;
     private JTextField nameField;
     private JComboBox<Clazz> classComboBox;
-    private JTextField addressField;
-    private JTextField phoneField;
-    private JButton 新增Button;
     private JRadioButton 男radioButton;
     private JRadioButton 女radioButton;
+    private JTextField addressField;
+    private JTextField phoneField;
+    private JButton 新增button;
+    private JLabel closeLabel;
     private JPanel datePanel;
     private JLabel avatarLabel;
-    private JLabel closeLabel;
-
+    private JPanel panel1;
     private String uploadFileUrl;
     private int classId;
     private File file;
     private final MainFrame mainFrame;
+    private Image image;
+
 
     public AddStudentFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
+//        image = new ImageIcon("/Users/orange/Pictures/sbz.jpeg").getImage();
+//        JPanel jPanel = new ImgPanel(image);
+//        jPanel.setBounds(0 , 0, 400,400 );
+//        this.setTitle("新增学生界面");
+//        this.getContentPane().add(jPanel);
         setContentPane(rootPanel);
         rootPanel.setFileName("sbz.jpeg");
         rootPanel.repaint();
         setUndecorated(true);
         setTitle("新增学生界面");
-        setSize(600, 600);
+        setSize(400,400);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,13 +87,12 @@ public class AddStudentFrame extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new File("/Users/orange/Pictures"));
+                fileChooser.setCurrentDirectory(new File("/Users/orange/Documents/school/java/stu_avatar"));
                 int result = fileChooser.showOpenDialog(rootPanel);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     file = fileChooser.getSelectedFile();
                     ImageIcon icon = new ImageIcon(file.getAbsolutePath());
                     icon.setImage(icon.getImage().getScaledInstance(150, 150, 150));
-                    avatarLabel.setText("");
                     avatarLabel.setIcon(icon);
                 }
             }
@@ -114,7 +120,7 @@ public class AddStudentFrame extends JFrame{
         datePanel.revalidate();
 
 
-        新增Button.addActionListener(e -> {
+        新增button.addActionListener(e -> {
             String gender = null;
             if (男radioButton.isSelected()) {
                 gender = "男";
@@ -139,9 +145,10 @@ public class AddStudentFrame extends JFrame{
                 mainFrame.showStudents(studentList);
             }
         });
-        新增Button.setBackground(new Color(134, 219, 71));
-        新增Button.setForeground(new Color(0, 0, 0));
+        新增button.setBackground(new Color(134, 219, 71));
+        新增button.setForeground(new Color(0, 0, 0));
     }
+
 
     private static DatePicker getDatePicker() {
         final DatePicker datePicker;
@@ -172,4 +179,3 @@ public class AddStudentFrame extends JFrame{
     }
 
 }
-
