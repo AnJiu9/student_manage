@@ -16,7 +16,6 @@ import java.net.URL;
 public class CarouselThread implements Runnable {
     private String[] imgs = {
             "https://share--app.oss-cn-hangzhou.aliyuncs.com/bg/20201212161100.JPG",
-            "https://pic-go-test0.oss-cn-hangzhou.aliyuncs.com/image/20201210125844.jpeg",
             "https://share--app.oss-cn-hangzhou.aliyuncs.com/bg/20201212162112.JPG",
             "https://share--app.oss-cn-hangzhou.aliyuncs.com/avatar/55354673-67a3-42c8-8db1-d97b203e41bc.JPG",
             "https://share--app.oss-cn-hangzhou.aliyuncs.com/bg/20201212170425.JPG"

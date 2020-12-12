@@ -10,11 +10,13 @@ import com.j.sm.factory.ServiceFactory;
 import com.j.sm.task.CarouselThread;
 import com.j.sm.task.TimeThread;
 import com.j.sm.utils.AliOSSUtil;
+import com.j.sm.utils.ExcelExporter;
 import com.j.sm.utils.FormatUtil;
 import com.j.sm.vo.StudentVo;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 import sun.tools.asm.Cover;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,6 +25,7 @@ import javax.xml.ws.Service;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
@@ -74,7 +77,7 @@ public class MainFrame extends JFrame {
     private JTextField searchField;
     private JButton 搜索Button;
     private JButton 新增学生Button;
-    private JButton 批量导入Button;
+    private JButton 导出Button;
     private JPanel tablePanel;
     private JLabel timeLabel;
     private JButton 重置Button;
@@ -103,6 +106,7 @@ public class MainFrame extends JFrame {
     private JTextField address;
     private JButton editBtn;
     private JButton delBtn;
+    private JTable table;
 
 
 
@@ -445,7 +449,33 @@ public class MainFrame extends JFrame {
             new AddStudentFrame(MainFrame.this);
             MainFrame.this.setEnabled(true);
         });
+        导出Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jButtonActionPerformed(e);
+            }
+        });
     }
+
+    private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        FileDialog fd = new FileDialog(this, "保存信息", FileDialog.SAVE);
+        try {
+            fd.setIconImage(ImageIO.read(new File("src/image/bottom.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fd.setLocation(500, 350);
+        fd.setVisible(true);
+        String stringfile = fd.getDirectory()+fd.getFile()+".xls";
+        try {
+            ExcelExporter export = new ExcelExporter();
+            export.exportTable(table, new File(stringfile));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
     private void reset() {
         //还原表格数据
@@ -650,7 +680,7 @@ public class MainFrame extends JFrame {
     public void showStudents(List<StudentVo> studentList) {
         tablePanel.removeAll();
         //创建表格
-        JTable table = new JTable();
+        table = new JTable();
         //表格数据模型
         DefaultTableModel model = new DefaultTableModel();
         table.setModel(model);

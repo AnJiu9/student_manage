@@ -11,7 +11,7 @@ import java.io.*;
  **/
 
 public class TxtThread implements Runnable{
-    File file = new File("/Users/orange/Desktop/text.txt");
+    File file = new File("src/main/resources/text.txt");
 
     private JLabel txtLabel;
 

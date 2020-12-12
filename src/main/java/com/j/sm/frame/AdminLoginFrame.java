@@ -3,6 +3,7 @@ package com.j.sm.frame;
 import com.j.sm.entity.Admin;
 import com.j.sm.factory.ServiceFactory;
 import com.j.sm.task.CarouselThread;
+import com.j.sm.task.TxtThread;
 import com.j.sm.utils.ResultEntity;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class AdminLoginFrame extends JFrame {
     private JButton loginBtn;
     private JButton resetBtn;
     private JPanel titlePanel;
+    private JLabel txtLabel;
 
 
     private JLabel bgLabel;
@@ -36,6 +38,11 @@ public class AdminLoginFrame extends JFrame {
         CarouselThread ct = new CarouselThread();
         ct.setBgLabel(bgLabel);
         new Thread(ct).start();
+
+//        loginPanel.add(txtLabel);
+        TxtThread tt = new TxtThread();
+        tt.setTxtLabel(txtLabel);
+        new Thread(tt).start();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1280, 1080);
