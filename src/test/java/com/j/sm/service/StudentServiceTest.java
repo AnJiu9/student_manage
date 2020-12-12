@@ -66,11 +66,14 @@ public class StudentServiceTest {
 
 
     @Test
-    public void updateStudent() {
+    public void updateStudent() throws ParseException {
         Student student = new Student();
         student.setId("18");
+        student.setStudentName("陈小云");
+        student.setPhone("13100091111");
+        student.setGender(FormatUtil.formatGender("保密"));
+        student.setBirthday(FormatUtil.parseDate("2000-1-10"));
         student.setAddress("浙江省温州市");
-        student.setPhone("13100001111");
         int n = studentService.updateStudent(student);
         assertEquals(1, n);
     }

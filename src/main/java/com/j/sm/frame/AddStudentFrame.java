@@ -42,7 +42,7 @@ public class AddStudentFrame extends JFrame{
     private JLabel avatarLabel;
     private JPanel panel1;
     private String uploadFileUrl;
-    private int classId;
+    private Integer classId;
     private File file;
     private final MainFrame mainFrame;
     private Image image;
@@ -60,7 +60,7 @@ public class AddStudentFrame extends JFrame{
         rootPanel.repaint();
         setUndecorated(true);
         setTitle("新增学生界面");
-        setSize(400,400);
+        setSize(400,600);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

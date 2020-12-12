@@ -2,6 +2,7 @@ package com.j.sm.dao.impl;
 
 import com.j.sm.dao.StudentDao;
 import com.j.sm.entity.Student;
+import com.j.sm.utils.FormatUtil;
 import com.j.sm.utils.JdbcUtil;
 import com.j.sm.vo.StudentVo;
 
@@ -63,7 +64,7 @@ public class StudentDaoImpl implements StudentDao {
                 "ON t2.department_id = t3.id\n" +
                 "WHERE t3.id = ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1,depId);
+        pstmt.setInt(1, depId);
         ResultSet rs = pstmt.executeQuery();
         List<StudentVo> list = convert(rs);
         rs.close();
@@ -84,7 +85,7 @@ public class StudentDaoImpl implements StudentDao {
                 "ON t2.department_id = t3.id\n" +
                 "WHERE t1.class_id = ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1,classId);
+        pstmt.setInt(1, classId);
         ResultSet rs = pstmt.executeQuery();
         List<StudentVo> list = convert(rs);
         rs.close();
@@ -105,8 +106,8 @@ public class StudentDaoImpl implements StudentDao {
                 "ON t2.department_id = t3.id\n" +
                 "WHERE t1.student_name LIKE ? OR t1.address LIKE ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1,"%" + keywords + "%");
-        pstmt.setString(2,"%" + keywords + "%");
+        pstmt.setString(1, "%" + keywords + "%");
+        pstmt.setString(2, "%" + keywords + "%");
         ResultSet rs = pstmt.executeQuery();
         List<StudentVo> list = convert(rs);
         rs.close();
@@ -141,7 +142,7 @@ public class StudentDaoImpl implements StudentDao {
         String sql = "INSERT INTO t_student VALUES (?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, student.getId());
-        pstmt.setInt(2, student.getClassId());
+        pstmt.setString(2, String.valueOf(student.getClassId()));
         pstmt.setString(3, student.getStudentName());
         pstmt.setString(4, student.getPhone());
         pstmt.setString(5, student.getAvatar());
@@ -171,11 +172,15 @@ public class StudentDaoImpl implements StudentDao {
     public int updateStudent(Student student) throws SQLException {
         JdbcUtil jdbcUtil = JdbcUtil.getInitJdbcUtil();
         Connection conn = jdbcUtil.getConnection();
-        String sql = "UPDATE t_student SET address = ?,phone = ? WHERE id = ?";
+        String sql = "UPDATE t_student SET student_name = ?, phone = ?, gender=?, birthday=?, address = ? WHERE id = ?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, student.getAddress());
+
+        pstmt.setString(1, student.getStudentName());
         pstmt.setString(2, student.getPhone());
-        pstmt.setString(3, student.getId());
+        pstmt.setInt(3,student.getGender());
+        pstmt.setString(4, FormatUtil.formatDate(student.getBirthday()));
+        pstmt.setString(5, student.getAddress());
+        pstmt.setString(6, student.getId());
         int n = pstmt.executeUpdate();
         pstmt.close();
         conn.close();

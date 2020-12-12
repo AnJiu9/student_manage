@@ -7,11 +7,13 @@ import com.j.sm.entity.Clazz;
 import com.j.sm.entity.Department;
 import com.j.sm.entity.Student;
 import com.j.sm.factory.ServiceFactory;
+import com.j.sm.task.CarouselThread;
 import com.j.sm.task.TimeThread;
 import com.j.sm.utils.AliOSSUtil;
 import com.j.sm.utils.FormatUtil;
 import com.j.sm.vo.StudentVo;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
+import sun.tools.asm.Cover;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -22,6 +24,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -91,15 +94,16 @@ public class MainFrame extends JFrame {
     private CustomPanel stuInfoPanel;
     private JLabel title;
     private JLabel avatar;
-    private JTextField depName;
-    private JTextField className;
+    private JLabel depName;
+    private JLabel className;
     private JTextField stuName;
-    private JLabel gender;
-    private JLabel birthday;
+    private JTextField gender;
+    private JTextField birthday;
     private JTextField phone;
     private JTextField address;
     private JButton editBtn;
     private JButton delBtn;
+
 
 
     public MainFrame(String adminName) {
@@ -228,25 +232,29 @@ public class MainFrame extends JFrame {
             avatar = new JLabel("<html><img src='https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180501.JPG 'width=50 height=50/></html>");
             avatar.setBounds(120,110,50,50);
 
+
             //院系
-            depName = new JTextField("未选择");
+            depName = new JLabel("未选择");
             depName.setBounds(50,170,200,40);
 
             //班级
-            className = new JTextField("未选择");
+            className = new JLabel("未选择");
             className.setBounds(50,220,200,40);
 
             //姓名
             stuName = new JTextField("未选择");
             stuName.setBounds(50,270,200,40);
+            stuName.setEnabled(false);
 
             //性别
-            gender = new JLabel("未选择");
+            gender = new JTextField("未选择");
             gender.setBounds(50,320,200,40);
+            gender.setEnabled(false);
 
             //生日
-            birthday = new JLabel("未选择");
+            birthday = new JTextField("未选择");
             birthday.setBounds(50,370,180,40);
+            birthday.setEnabled(false);
 
             //电话
             phone = new JTextField("未选择");
@@ -268,31 +276,33 @@ public class MainFrame extends JFrame {
             AtomicBoolean flag = new AtomicBoolean(true);
             editBtn.addActionListener(edit -> {
                 if (flag.get()) {
-//                    stuName.setEnabled(true);
-//                    gender.setEnabled(true);
-//                    birthday.setEnabled(true);
+                    stuName.setEnabled(true);
+                    gender.setEnabled(true);
+                    birthday.setEnabled(true);
                     phone.setEnabled(true);
                     address.setEnabled(true);
                     flag.set(false);
                 } else {
-//                    ServiceFactory.getStudentServiceInstance().updateStudent(idLabel.getText(), "student_name", stuName.getText());
-//                    ServiceFactory.getStudentServiceInstance().renewStudentInfo(idLabel.getText(), "gender", genderIntoId(gender.getText()));
-//                    ServiceFactory.getStudentServiceInstance().renewStudentInfo(idLabel.getText(), "birthday", birthday.getText());
                     Student student = new Student();
                     student.setId(title.getText());
+                    student.setStudentName(stuName.getText());
+                    try {
+                        student.setBirthday(FormatUtil.parseDate(birthday.getText()));
+                    } catch (ParseException parseException) {
+                        parseException.printStackTrace();
+                    }
                     student.setPhone(phone.getText());
+                    student.setGender(FormatUtil.formatGender(gender.getText()));
                     student.setAddress(address.getText());
                     int n = ServiceFactory.getStudentServiceInstance().updateStudent(student);
                     if (n == 1) {
                         JOptionPane.showMessageDialog(mainPanel, "修改成功");
                     }
-//                    ServiceFactory.getStudentServiceInstance().updateStudent(title.getText(), "phone", phone.getText());
-//                    ServiceFactory.getStudentServiceInstance().updateStudent(idLabel.getText(), "address", address.getText());
                     showStudents(ServiceFactory.getStudentServiceInstance().getAll());
                     flag.set(true);
-//                    stuName.setEnabled(false);
-//                    gender.setEnabled(false);
-//                    birthday.setEnabled(false);
+                    stuName.setEnabled(false);
+                    gender.setEnabled(false);
+                    birthday.setEnabled(false);
                     phone.setEnabled(false);
                     address.setEnabled(false);
                 }
@@ -475,6 +485,7 @@ public class MainFrame extends JFrame {
 //        setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
+
     }
 
     /**

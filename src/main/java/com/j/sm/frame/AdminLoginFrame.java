@@ -2,9 +2,11 @@ package com.j.sm.frame;
 
 import com.j.sm.entity.Admin;
 import com.j.sm.factory.ServiceFactory;
+import com.j.sm.task.CarouselThread;
 import com.j.sm.utils.ResultEntity;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @ClassName AdminLoginFrame
@@ -15,26 +17,32 @@ import javax.swing.*;
 
 public class AdminLoginFrame extends JFrame {
     private JPanel mainPanel;
-    private JPanel topPanel;
-    private JPanel leftPanel;
-    private JPanel rightPanel;
-    private JPanel bottomPanel;
     private JPanel centerPanel;
-    private JPanel titlePanel;
-    private JLabel titleLable;
     private JPanel loginPanel;
     private JTextField accountField;
     private JPasswordField passwordField;
     private JButton loginBtn;
     private JButton resetBtn;
+    private JPanel titlePanel;
+
+
+    private JLabel bgLabel;
 
     public AdminLoginFrame() {
         this.setTitle("AdminLoginFrame");
         this.setContentPane(mainPanel);
+        bgLabel = new JLabel();
+        titlePanel.add(bgLabel);
+        CarouselThread ct = new CarouselThread();
+        ct.setBgLabel(bgLabel);
+        new Thread(ct).start();
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(900, 750);
+        this.setSize(1280, 1080);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+
 
         loginBtn.addActionListener(e -> {
             //获得输入的账号和密码，注意密码框组件的使用方法

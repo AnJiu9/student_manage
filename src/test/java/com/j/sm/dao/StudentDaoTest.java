@@ -50,7 +50,7 @@ public class StudentDaoTest {
         student.setStudentName("嘉弈");
         student.setAvatar("https://student-management-img.oss-cn-hangzhou.aliyuncs.com/logo/20201123180459.JPG");
         student.setBirthday(new Date());
-        student.setGender((short) 1);
+        student.setGender((short) 2);
         student.setPhone("13899991111");
         student.setAddress("四川省成都市");
         int n = studentDao.insertStudent(student);
@@ -58,11 +58,16 @@ public class StudentDaoTest {
     }
 
     @Test
-    public void updateStudent() throws SQLException {
+    public void updateStudent() throws SQLException, ParseException {
         Student student = new Student();
         student.setId("12");
-        student.setAddress("浙江省温州市");
+        student.setClassId(1);
+        student.setStudentName("云蘅");
         student.setPhone("13100001111");
+        student.setGender((short) 1);
+        student.setBirthday(FormatUtil.parseDate("2020-01-01"));
+        student.setAddress("浙江省杭州市");
+
         int n = studentDao.updateStudent(student);
         assertEquals(1, n);
     }
